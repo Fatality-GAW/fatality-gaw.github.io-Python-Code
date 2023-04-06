@@ -79,7 +79,6 @@ for month in month_dictionary:
         writer = csv.writer(f)
         print(f'writing {file}')
         for url in month_dictionary[month]:
-            url = f'https://greatawakening.win{url}'
             for row in gaw_sticky_posts:
                 if url == row[2]:
                     writer.writerow(row)

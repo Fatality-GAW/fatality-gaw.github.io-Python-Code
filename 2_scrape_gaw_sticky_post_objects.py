@@ -29,13 +29,13 @@ all_posts = 0
 def scrape(url):
     global count
 
-    url = f'https://greatawakening.win{url}'
+    request_url = f'https://greatawakening.win{url}'
 
     count = count + 1
 
-    print(f'reading {count}/{all_posts}: {url}')
+    print(f'reading {count}/{all_posts}: {request_url}')
 
-    response = requests.get(url)
+    response = requests.get(request_url)
 
     soup = BeautifulSoup(response.content, 'html.parser')
 
@@ -54,20 +54,16 @@ def scrape(url):
                 # get post id (first) and author (last)
                 post_data = article_element.find('div', {'class': 'post'})
                 if post_data:
-                    author = post_data.get('data-author').replace('\r\n', '').replace('\n\r', '').replace('\r',
-                                                                                                          '').replace(
-                        '\n', '').strip()
-                    post_id = post_data.get('data-id').replace('\r\n', '').replace('\n\r', '').replace('\r',
-                                                                                                       '').replace('\n',
-                                                                                                                   '').strip()
+                    author = post_data.get('data-author').replace('\r\n', '').replace('\n\r', '').replace('\r', '').replace('\n',
+                                                                                                            '').strip()
+                    post_id = post_data.get('data-id').replace('\r\n', '').replace('\n\r', '').replace('\r', '').replace('\n',
+                                                                                                            '').strip()
 
                 # GMT Date
                 time_element = article_element.find('time', {'class': 'timeago'})
                 if time_element:
-                    time = time_element.get('title').replace('\r\n', '').replace('\n\r', '').replace('\r', '').replace(
-                        '\n', '').strip()
-                # https:///gaw  full url
-                full_url = url
+                    time = time_element.get('title').replace('\r\n', '').replace('\n\r', '').replace('\r', '').replace('\n',
+                                                                                                            '').strip()
 
                 # vote #
                 vote_data = article_element.find('div', {'class': 'vote'})
@@ -78,19 +74,21 @@ def scrape(url):
                 # title
                 title_data = article_element.find('a', {'class': 'title'})
                 if title_data:
-                    title = title_data.text.replace('\r\n', '').replace('\n\r', '').replace('\r', '').replace('\n',
-                                                                                                              '').strip()
+                    title = title_data.text.replace('\r\n', ' ').replace('\n\r', ' ').replace('\r', ' ').replace('\n',
+                                                                                                            ' ').strip()
+                    title_words = title.split()
+                    trimmed_title = " ".join(title_words).strip()
 
                 # [title](url)
-                gaw_link = f'[{title}]({url})'
+                gaw_link = f'[{trimmed_title}]({request_url})'
 
-                return [post_id, time, url, vote, title, gaw_link, author]
+                return [post_id, time, url, vote, trimmed_title, gaw_link, author]
             else:
-                print(f'Missing one or more of the required elements @ {url}')
+                print(f'Missing one or more of the required elements @ {request_url}')
         else:
-            print(f'Missing <main> element @ {url}')
+            print(f'Missing <main> element @ {request_url}')
     else:
-        print(f'Missing <div> element with class "container" @ {url}')
+        print(f'Missing <div> element with class "container" @ {request_url}')
 
 
 # Get the distinct urls from the GAW_sticky_logs_objects file
@@ -122,8 +120,8 @@ if os.path.exists(GAW_sticky_posts_objects):
 
 # Remove non-retrieved urls:
 for post in gaw_sticky_posts:
-    text = post[2].replace('https://greatawakening.win', '')
-    if text in distinct_url:  # 2 is time: ([post_id, time, url, vote, title, gaw_link, author])
+    text = post[2]
+    if text in distinct_url:  # 2 is url: ([post_id, time, url, vote, title, gaw_link, author])
         distinct_url.remove(text)
 
 if to_get != 0:

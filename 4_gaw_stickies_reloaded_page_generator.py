@@ -26,15 +26,22 @@ for filename in os.listdir('./CSVs'):
     # Get the current date and time
     now = datetime.datetime.now()
     # Get the month and year as two separate variables
-    month = now.month
+    month = f'{now.month:02d}'
     year = now.year
     # Format the month and year as a string with a leading zero for single digit months
     time = filename.replace('.csv', '')
+    page = f'https://GreatAwakening.win'
+    title1 = f'GREATAWAKENING.WIN'
+    title2 = f'STICKIES RELOADED'
+    title3 = f'STICKIES RELOADING..'
+    title = f'{time} {title1} {title2}'
     fire = '🔥'
     new = '🆕'
     boom = '💥'
     download = '📥'
     changes = '📃'
+    code = '📑'
+    reloading = '🔄'
     # Read csv file and extract the columns of interest
     with open(f'./CSVs/{filename}', newline='') as f:
         reader = csv.reader(f)
@@ -44,7 +51,7 @@ for filename in os.listdir('./CSVs'):
     table_rows = []
     row_count = 0
     for index, row in enumerate(data):
-
+        row[1] = f'{page}{row[1]}'
         #skip if there is no title:
         if row[2].strip() == "":
             continue
@@ -117,10 +124,6 @@ for filename in os.listdir('./CSVs'):
         table_rows.append(table_row)
 
     # Create the HTML page
-    page = f'https://GreatAwakening.win'
-    title1 = f'GREATAWAKENING.WIN'
-    title2 = f'STICKIES RELOADED'
-    title = f'{time} {title1} {title2}'
     html = f'<!DOCTYPE html>\n<html>\n<head>\n<meta charset="UTF-8">\n'
     html += f'<title>{fire} {title} {fire}</title>\n'
     html += '<style>\nbody {\nbackground-color:black;\ncolor:#4d4848;\nfont-family: Arial, sans-serif, Segoe UI Emoji, '
@@ -178,6 +181,8 @@ with open('./Pages/index.html', mode='w', encoding='utf-8') as f:
     html += f'<span style="font-size:3em;"><a href="https://github.com/Fatality-GAW/fatality-gaw.github.io/archive/refs/heads/main.zip" style="text-decoration:none;" onmouseover="this.style.textShadow=\'0px 0px 10px white\';" onmouseout="this.style.textShadow=\'none\'">{download}</a></span></div>\n'
     html += '<div id="right-div" style="position: fixed; top: 125px; right: 2%; z-index: 9999;">'
     html += f'<span style="font-size:3em;"><a href="https://github.com/Fatality-GAW/fatality-gaw.github.io/commits/main" style="text-decoration:none;" onmouseover="this.style.textShadow=\'0px 0px 10px white\';" onmouseout="this.style.textShadow=\'none\'">{changes}</a></span></div>\n'
+    html += '<div id="right-div" style="position: fixed; top: 225px; right: 2%; z-index: 9999;">'
+    html += f'<span style="font-size:3em;"><a href="https://github.com/Fatality-GAW/fatality-gaw.github.io-Python-Code" style="text-decoration:none;" onmouseover="this.style.textShadow=\'0px 0px 10px white\';" onmouseout="this.style.textShadow=\'none\'">{code}</a></span></div>\n'
     html += '<table style="width: 75%; margin: 0 auto;">\n<tbody>\n'
     for index, file in enumerate(files):
         fileTitle = file.replace('html', '').replace('.', ' ').replace(' ', '.', 1).replace('GREATAWAKENING WIN', title1).strip()
@@ -188,8 +193,12 @@ with open('./Pages/index.html', mode='w', encoding='utf-8') as f:
         table_row += f'onmouseout="this.style.backgroundColor=\'{row_color}\'; this.childNodes[0].childNodes[0].style.color=\'#4ca1e0\'; this.childNodes[0].childNodes[0].style.textShadow=\'none\';" '
         table_row += f'onclick="window.location.href=\'./{file}\'"; >'
         if first_post:
-            table_row += f'<td style="padding:1em;color:#4ca1e0;font-weight:bold;"><a href="./{file}" target="_self" style="color:inherit;text-decoration:inherit;">{boom} {new} {fire} {fileTitle} {fire} {new} {boom}</a></td>'
-            first_post = False
+            if file.startswith(f'{year}.{month}'):
+                reloadingTitle = file.replace('html', '').replace('.', ' ').replace(' ', '.', 1).replace('GREATAWAKENING WIN', title1).replace(title2, title3).strip()
+                table_row += f'<td style="padding:1em;color:#4ca1e0;font-weight:bold;"><a href="./{file}" target="_self" style="color:inherit;text-decoration:inherit;">{reloading} {fire} {reloadingTitle} {fire} {reloading}</a></td>'
+            else:
+                table_row += f'<td style="padding:1em;color:#4ca1e0;font-weight:bold;"><a href="./{file}" target="_self" style="color:inherit;text-decoration:inherit;">{boom} {new} {fire} {fileTitle} {fire} {new} {boom}</a></td>'
+                first_post = False
         else:
             table_row += f'<td style="padding:1em;color:#4ca1e0;font-weight:bold;"><a href="./{file}" target="_self" style="color:inherit;text-decoration:inherit;">{fire} {fileTitle} {fire}</a></td>'
         table_row += '</tr>'
