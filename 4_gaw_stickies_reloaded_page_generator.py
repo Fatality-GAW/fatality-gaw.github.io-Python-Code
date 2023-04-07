@@ -130,7 +130,7 @@ for filename in os.listdir('./CSVs'):
     html += 'Noto Color Emoji, Twemoji;\nmargin: 0; padding: 0;}\nh1 {\nfont-size: 2.5em; font-weight: normal; color: #464c8a;'
     html += f'\ntext-align: center;text-shadow: 0px 0px 4px #464c8a, 0px 0px 4px #464c8a, 0px 0px 5px #464c8a;\n</style>\n</head>\n<body>\n'
     if filename != sorted(os.listdir('./CSVs'))[0] and filename != sorted(os.listdir('./CSVs'))[-1]:
-        html += '<div id="menu-div" style="position: fixed; top: 25px; right: 2%; z-index: 9999;">'
+        html += '<div id="menu-div" style="position: fixed; top: 125px; right: 0%; z-index: 9999;">'
         html += f'<span style="font-size:3em;"><a href="index.html" style="text-decoration:none;color:#346c91;" onmouseover="this.style.color=\'#dc4848\'" onmouseout="this.style.color=\'#346c91\'">☰</a></span></div>\n'
     html += '<div id="left-div" style="position: fixed; top: 50%; left: 0; transform: translateY(-50%); z-index: 9999;">'
     if filename != sorted(os.listdir('./CSVs'))[0]:
