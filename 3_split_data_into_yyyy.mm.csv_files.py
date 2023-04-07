@@ -77,8 +77,9 @@ for month in month_dictionary:
     file = f'./CSVs/{month}.csv'
     with open(file, 'w', newline='') as f:
         writer = csv.writer(f)
-        print(f'writing {file}')
         for url in month_dictionary[month]:
             for row in gaw_sticky_posts:
                 if url == row[2]:
                     writer.writerow(row)
+                    break
+        print(f'wrote \'{file}\'')
