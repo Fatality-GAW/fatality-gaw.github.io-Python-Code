@@ -6,6 +6,11 @@
 
     Step 2: run the script, it will fetch all urls of the stickies and put them in the GAW_sticky_post_objects.csv.
 
+    Step 3: run this a few times to make sure that you have all the data, it will say:
+        File './WorkingCSVs/GAW_sticky_logs_objects.csv' read.
+        File './WorkingCSVs/GAW_sticky_posts_objects.csv' read.
+        File './WorkingCSVs/GAW_sticky_posts_objects.csv' written.
+
     Optional: Delete GAW_sticky_post_objects file to erase all the data and start scraping a new dataset.
 """
 

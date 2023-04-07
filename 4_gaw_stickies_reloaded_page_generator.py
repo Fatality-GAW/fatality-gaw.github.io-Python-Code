@@ -155,8 +155,10 @@ for filename in os.listdir('./CSVs'):
 
     # Write HTML page to file
     title = title.replace(" ", ".")
-    with open(f'./Pages/{title}.html', mode='w', encoding='utf-8') as f:
+    path = f'./Pages/{title}.html'
+    with open(path, mode='w', encoding='utf-8') as f:
         f.write(html)
+        print(f'wrote \'{path}\'')
 
 # get the list of HTML pages
 pattern = re.compile(r'^(\d{4}\.\d{2})\.GREATAWAKENING\.WIN\.STICKIES\.RELOADED\.html$')
@@ -169,7 +171,8 @@ files = sorted(files, reverse=True)
 
 first_post = True
 # update the new index.html
-with open('./Pages/index.html', mode='w', encoding='utf-8') as f:
+path = './Pages/index.html'
+with open(path, mode='w', encoding='utf-8') as f:
     title = f'{fire} {title1} {title2} {fire}'
     html = f'<!DOCTYPE html>\n<html>\n<head>\n<meta charset="UTF-8">\n'
     html += f'<title>{title}</title>\n'
@@ -205,3 +208,4 @@ with open('./Pages/index.html', mode='w', encoding='utf-8') as f:
         html += table_row
     html += '</tbody>\n</table>\n</body>\n</html>'
     f.write(html)
+    print(f'wrote \'{path}\'')

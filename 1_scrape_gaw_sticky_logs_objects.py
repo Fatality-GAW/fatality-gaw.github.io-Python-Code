@@ -10,6 +10,7 @@
                     then change:
                         first_sticky_page_no to last_sticky_page_no
                         last_sticky_page_no to the new last page number
+                    and run it again.
 
     Step 3: After you have all the stickies, change the variables back to:
                         first_sticky_page_no = 1
@@ -70,7 +71,7 @@ while count <= last_sticky_page_no:
         else:
             skipped = skipped + 1
 
-    print(f'\t{skipped} skipped.')
+    print(f'\t{skipped} were already retrieved.')
     count = count + 1
 
 # Sort the dictionary
