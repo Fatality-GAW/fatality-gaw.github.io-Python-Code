@@ -1,5 +1,5 @@
 """
-    Fatality's GAW Stickies Reloaded Page Generator
+    Fatality's & ChatGPT's GAW Stickies Reloaded Page Generator
     -----------------------------------------------
 
     Step 1:  you must have the output from 3_split_data_into_yyyy.mm.csv_files.py
@@ -7,6 +7,7 @@
     Step 2: remove any csv files you don't want to generate a page for (usually the current month)
 
     Step 3: run the script, it will generate the web pages.
+
 """
 import csv
 import datetime

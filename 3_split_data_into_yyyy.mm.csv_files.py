@@ -1,5 +1,5 @@
 """
-    Fatality's Split Data Into YYYY.MM.csv Files
+    Fatality's & ChatGPT's Split Data Into YYYY.MM.csv Files
     --------------------------------------------
 
     Step 1:  you must have the output from 1_scrape_gaw_sticky_logs_objects.py and 2_scrape_gaw_sticky_post_objects.py
@@ -75,11 +75,11 @@ for month in month_dictionary:
     if month == 'None.None':
         continue
     file = f'./CSVs/{month}.csv'
+    month_urls = set(month_dictionary[month])
+
     with open(file, 'w', newline='') as f:
         writer = csv.writer(f)
-        for url in month_dictionary[month]:
-            for row in gaw_sticky_posts:
-                if url == row[2]:
-                    writer.writerow(row)
-                    break
+        for row in gaw_sticky_posts:
+            if row[2] in month_urls:
+                writer.writerow(row)
         print(f'wrote \'{file}\'')

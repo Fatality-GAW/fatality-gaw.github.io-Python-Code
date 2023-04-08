@@ -1,6 +1,6 @@
 """
-    Fatality's Scrape GAW Sticky Posts Objects
-    ------------------------------------------
+    Fatality's & ChatGPT's Scrape GAW Sticky Posts Objects
+    ------------------------------------------------------
 
     Step 1:  you must have the output from 1_scrape_gaw_sticky_logs_objects.py
 

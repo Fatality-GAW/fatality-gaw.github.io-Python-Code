@@ -1,5 +1,5 @@
 """
-    Fatality's Scrape GAW Sticky Logs Objects
+    Fatality's & ChatGPT's Scrape GAW Sticky Logs Objects
     -----------------------------------------
 
     Step 1:  find out the last page of stickies:.
