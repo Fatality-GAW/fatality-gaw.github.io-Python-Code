@@ -57,6 +57,7 @@ for filename in os.listdir('./CSVs'):
         if row[2].strip() == "":
             continue
 
+
         row_count = row_count + 1
 
         # Set alternating row colors
