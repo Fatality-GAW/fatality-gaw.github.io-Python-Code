@@ -74,7 +74,7 @@ for filename in os.listdir('./CSVs'):
         buzz_regex = r'Time For A "Buzz"'
         if re.search(unleashed_regex, row[2]) or re.search(buzz_regex, row[2]):
             if row[3] == 'ashlanddog' or row[3] == 'Taffy333' or row[3] == 'Nurarihyon_no_MAGA':
-                row_color = "#1d1d30"
+                row_color = "rgb(43, 43, 70)"
 
         # Check if data value matches regular expression for Uncle_Fester's sunday funnies
         sunday_regex = r'Sunday Funnies'
@@ -86,7 +86,7 @@ for filename in os.listdir('./CSVs'):
         wins_regex = r'Wins of the Day:'
         if re.search(wins_regex, row[2]):
             if row[3] == 'WinsAnon':
-                row_color = "#2e281f"  # Change row color if condition is met
+                row_color = "rgb(60, 55, 39)"  # Change row color if condition is met
 
         # Check if data value matches regular expression for high-valyrian's Daily Discussion
         daily_regex = r'Daily Discussion Thread'
@@ -99,6 +99,18 @@ for filename in os.listdir('./CSVs'):
         if re.search(hold_regex, row[2]):
             if row[3] == 'penisse':
                 row_color = "#003333"
+
+        # Check if data value matches regular expression for penisse's 'Q Drops - '
+        Qdrops1_regex = f'Q Drop'
+        Qdrops2_regex = f'Q Drop'
+        if re.search(Qdrops1_regex, row[2]) or re.search(Qdrops2_regex, row[2]):
+            if row[3] == 'meteorknife':
+                row_color = "rgb(230, 230, 230)"
+
+        # Check if data value matches regular expression for 'New Q'
+        Qdrops1_regex = f'New Q'
+        if re.search(Qdrops1_regex, row[2]):
+            row_color = "rgb(230, 230, 230)"
 
 
         # Create table row
