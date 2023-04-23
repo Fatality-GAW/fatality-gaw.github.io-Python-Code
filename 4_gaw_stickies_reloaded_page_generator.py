@@ -70,7 +70,7 @@ for filename in os.listdir('./CSVs'):
         row_color = "#202020" if row_count % 2 == 0 else "#111111"
 
         # Check if data value matches regular expression for bubble_bursts' general chat
-        chat_regex = r'General Chat for (Mon|Tue|Wed|Thu|Fri|Sat|Sun), (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{1,2}'
+        chat_regex = r'General Chat for'
         if re.search(chat_regex, row[2]):
             if row[3] == 'bubble_bursts':
                 row_color = "#3a252f"
