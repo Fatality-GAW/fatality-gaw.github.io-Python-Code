@@ -18,11 +18,16 @@ import re
 # Define a regular expression pattern to match the filename format
 pattern = re.compile(r'^(\d{4}\.\d{2})\.csv$')
 
+# TODO Set up a var for mega-rows for the mega TODO name
+all_rows = []
+
+
+
 # Loop over all files in the current directory
 for filename in os.listdir('./CSVs'):
 
 
-    count = 0;
+    count = 0
     last_title = ""
     # Get the current date and time
     now = datetime.datetime.now()
@@ -47,6 +52,7 @@ for filename in os.listdir('./CSVs'):
     with open(f'./CSVs/{filename}', newline='') as f:
         reader = csv.reader(f)
         data = [[row[1], row[2], row[4], row[6]] for row in reader]
+
 
     # Create table rows
     table_rows = []
@@ -88,6 +94,12 @@ for filename in os.listdir('./CSVs'):
             if row[3] == 'WinsAnon':
                 row_color = "rgb(60, 55, 39)"  # Change row color if condition is met
 
+        # Check if data value matches regular expression for Puncake150's EXTRA WINS OF THE DAY
+        wins_regex = r'Extra Wins of the Day:'
+        if re.search(wins_regex, row[2]):
+            if row[3] == 'Puncake150':
+                row_color = "rgb(60, 44, 54)"  # Change row color if condition is met
+
         # Check if data value matches regular expression for high-valyrian's Daily Discussion
         daily_regex = r'Daily Discussion Thread'
         if re.search(daily_regex, row[2]):
@@ -112,7 +124,6 @@ for filename in os.listdir('./CSVs'):
         if re.search(Qdrops1_regex, row[2]):
             row_color = "rgb(230, 230, 230)"
 
-
         # Create table row
         table_row = f'<tr id="{row_count}" style="background-color: {row_color}; border-bottom: 1px solid darkred;" '
         table_row += f'onmouseover="this.style.backgroundColor=\'#253147\'; '
@@ -136,6 +147,7 @@ for filename in os.listdir('./CSVs'):
         table_row += f'{row[2]}</a></td>'
         table_row += '</tr>'
         table_rows.append(table_row)
+        all_rows.append(table_row)
 
     # Create the HTML page
     html = f'<!DOCTYPE html>\n<html>\n<head>\n<meta charset="UTF-8">\n'
