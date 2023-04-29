@@ -26,7 +26,7 @@ all_rows = []
 # Loop over all files in the current directory
 for filename in os.listdir('./CSVs'):
 
-
+    name_of_all_stickies_file = "ALL" # ALL.CSV's name "ALL" is defined in section 4: of 3_split_data_into_yyyy.mm.csv_files.py
     count = 0
     last_title = ""
     # Get the current date and time
@@ -41,6 +41,7 @@ for filename in os.listdir('./CSVs'):
     title2 = f'STICKIES RELOADED'
     title3 = f'STICKIES RELOADING..'
     title = f'{time} {title1} {title2}'
+    everything = '🌐'
     fire = '🔥'
     new = '🆕'
     boom = '💥'
@@ -56,15 +57,27 @@ for filename in os.listdir('./CSVs'):
 
     # Create table rows
     table_rows = []
+
     row_count = 0
+    # Identify if currently reading ALL.CSV:
+    if time == name_of_all_stickies_file:
+        row_count += 1
+        # count how many rows have a title
+        for index, row in enumerate(data):
+            if row[2].strip() != "":
+                row_count += 1
+
     for index, row in enumerate(data):
         row[1] = f'{page}{row[1]}'
-        #skip if there is no title:
+        # skip if there's no title (post is gone)
         if row[2].strip() == "":
             continue
 
-
-        row_count = row_count + 1
+        # switch up the count if this is the "ALL" stickies or not:
+        if time == name_of_all_stickies_file:
+            row_count -= 1
+        else:
+            row_count += 1
 
         # Set alternating row colors
         row_color = "#202020" if row_count % 2 == 0 else "#111111"
@@ -125,26 +138,12 @@ for filename in os.listdir('./CSVs'):
             row_color = "rgb(230, 230, 230)"
 
         # Create table row
-        table_row = f'<tr id="{row_count}" style="background-color: {row_color}; border-bottom: 1px solid darkred;" '
-        table_row += f'onmouseover="this.style.backgroundColor=\'#253147\'; '
-        table_row += f'this.childNodes[0].style.color=\'lightgrey\'; this.childNodes[0].style.textShadow=\'0px 0px 10px black\'; '
-        table_row += f'this.childNodes[1].style.color=\'white\'; this.childNodes[1].style.textShadow=\'0px 0px 10px black\'; '
-        table_row += f'this.childNodes[2].childNodes[0].style.color=\'#dc4848\'; this.childNodes[2].style.textShadow=\'0px 0px 10px black\'; '
-        table_row += f'this.childNodes[1].childNodes[0].style.color=\'#4ca1e0\';" '
-        table_row += f'onmouseout="this.style.backgroundColor=\'{row_color}\'; '
-        table_row += f'this.childNodes[0].style.color=\'#4d4848\'; this.childNodes[0].style.textShadow=\'none\'; '
-        table_row += f'this.childNodes[1].style.color=\'#4d4848\'; this.childNodes[1].style.textShadow=\'none\'; '
-        table_row += f'this.childNodes[2].childNodes[0].style.color=\'#4ca1e0\'; this.childNodes[2].style.textShadow=\'none\'; '
-        table_row += f'this.childNodes[1].childNodes[0].style.color=\'#346c91\';" '
+        table_row = f'<tr class="table_row" id="{row_count}" style="background-color: {row_color};" '
         table_row += f'onclick="if (event.target.tagName == \'A\') return true; '
         table_row += f'window.open(\'{row[1]}\',\'_blank\',\'noopener noreferrer\');" >'
-        table_row += f'<td style="background-color:black;top:0;text-align:right;vertical-align:top;">{row_count}</td>'
-        table_row += f'<td style="font-weight:bold;font-size:xx-small;color:#4d4848;padding:1em;text-align:left;vertical-align:top;'
-        table_row += f'width:10%;max-width:10%;white-space:nowrap;"><span style="color:#346c91">{row[3]}</span> @<br>{row[0]}</td>'
-        table_row += f'<td style="padding:1em;color:#464c8a;padding-left:5%;padding-right:5%;'
-        table_row += f'font-family: Arial, sans-serif, Segoe UI Emoji, Noto Color Emoji, Twemoji;">'
-        table_row += f'<a href="{row[1]}" target="_blank" style="text-decoration:none;font-weight:bold;color:#4ca1e0;">'
-        table_row += f'{row[2]}</a></td>'
+        table_row += f'<td class="number_col">{row_count}</td>'
+        table_row += f'<td class="detail_col"><span>{row[3]}</span> @<br>{row[0]}</td>'
+        table_row += f'<td class="title_col"><a href="{row[1]}" target="_blank">{row[2]}</a></td>'
         table_row += '</tr>'
         table_rows.append(table_row)
         all_rows.append(table_row)
@@ -154,25 +153,41 @@ for filename in os.listdir('./CSVs'):
     html += f'<title>{fire} {title} {fire}</title>\n'
     html += '<style>\nbody {\nbackground-color:black;\ncolor:#4d4848;\nfont-family: Arial, sans-serif, Segoe UI Emoji, '
     html += 'Noto Color Emoji, Twemoji;\nmargin: 0; padding: 0;}\nh1 {\nfont-size: 2.5em; font-weight: normal; color: #464c8a;'
-    html += f'\ntext-align: center;text-shadow: 0px 0px 4px #464c8a, 0px 0px 4px #464c8a, 0px 0px 5px #464c8a;\n</style>\n</head>\n<body>\n'
-    if filename != sorted(os.listdir('./CSVs'))[0] and filename != sorted(os.listdir('./CSVs'))[-1]:
+    html += '\ntext-align: center;text-shadow: 0px 0px 4px #464c8a, 0px 0px 4px #464c8a, 0px 0px 5px #464c8a;\n}\n'
+    html += '.number_col {\nbackground-color: black;\ntop: 0;\ntext-align: right;\nvertical-align: top;\n}\n'
+    html += '.detail_col {\nfont-weight:bold;\nfont-size:xx-small;\ncolor:#4d4848;\npadding:1em;\ntext-align:left;\nvertical-align:top;\nwidth:10%;\nmax-width:10%;\nwhite-space:nowrap;\n}\n'
+    html += '.detail_col span {\ncolor:#346c91\n}\n'
+    html += '.title_col {\npadding:1em;\ncolor:#464c8a;\npadding-left:5%;\npadding-right:5%;\n}\n'
+    html += '.title_col a {\ntext-decoration:none;\nfont-weight:bold;\ncolor:#4ca1e0;\n}\n'
+    html += '.table_row:hover {\nbackground-color: #253147;\n}\ntable_row:hover td:first-child {\ncolor: #346c91;\ntext-shadow: 0px 0px 10px black;\n}\n.table_row:hover td:nth-child(2) {\ncolor: white;\ntext-shadow: 0px 0px 10px black;\n}\n.table_row:hover td:nth-child(3) a {\ncolor: #dc4848;\ntext-shadow: 0px 0px 10px black;\n}\n.table_row:hover td:nth-child(2) span {\ncolor: #4ca1e0;\ntext-shadow: 0px 0px 10px black;\n}\n.table_row td {\ntransition: all 0.3s;\n}\n.table_row td:first-child {\ncolor: #4d4848;\n}\n.table_row td:nth-child(2),\n.table_row td:nth-child(2) span {\ncolor: #4d4848;\n}\n.table_row td:nth-child(3) a {\ncolor: #4ca1e0;\n}\n'
+    html += '</style>\n</head>\n<body>\n'
+    # if the file name isn't 2020.08.csv [0], or today's yyyy.mm.csv [-2] put the upper right side menu link:
+    if filename != sorted(os.listdir('./CSVs'))[0] and filename != sorted(os.listdir('./CSVs'))[-2]:
         html += '<div id="menu-div" style="position: fixed; top: 125px; right: 0%; z-index: 9999;">'
         html += f'<span style="font-size:3em;"><a href="index.html" style="text-decoration:none;color:#346c91;" onmouseover="this.style.color=\'#dc4848\'" onmouseout="this.style.color=\'#346c91\'">☰</a></span></div>\n'
-    html += '<div id="left-div" style="position: fixed; top: 50%; left: 0; transform: translateY(-50%); z-index: 9999;">'
-    if filename != sorted(os.listdir('./CSVs'))[0]:
+
+    # if the file name isn't 2020.08.csv [0], or ALL.csv [-1] put the ◄ on the left side of the page
+    if filename != sorted(os.listdir('./CSVs'))[0] and filename != sorted(os.listdir('./CSVs'))[-1]:
         previous_index = sorted(os.listdir('./CSVs')).index(filename) - 1
         lname = sorted(os.listdir('./CSVs'))[previous_index].replace('./CSVs', '').replace('.csv', '')
         leftlink = f'{lname}.{title1}.{title2.replace(" ", ".")}.html'
+        html += '<div id="left-div" style="position: fixed; top: 50%; left: 0; transform: translateY(-50%); z-index: 9999;">'
         html += f'<span style="font-size:4em;"><a href="{leftlink}" style="text-decoration:none;color:#346c91;" onmouseover="this.style.color=\'#dc4848\'" onmouseout="this.style.color=\'#346c91\'">◄</a></span></div>\n'
-    else:
+    # but if the file name is 2020.08.csv [0], put the ☰ on the left side
+    elif filename == sorted(os.listdir('./CSVs'))[0]:
+        html += '<div id="left-div" style="position: fixed; top: 50%; left: 0; transform: translateY(-50%); z-index: 9999;">'
         html += f'<span style="font-size:4em;"><a href="index.html" style="text-decoration:none;color:#346c91;" onmouseover="this.style.color=\'#dc4848\'" onmouseout="this.style.color=\'#346c91\'">☰</a></span></div>\n'
-    html += '<div id="right-div" style="position: fixed; top: 50%; right: 0; transform: translateY(-50%); z-index: 9999;">'
-    if filename != sorted(os.listdir('./CSVs'))[-1]:
+
+    # If the file name isn't today's yyyy.mm.csv [-2], or ALL.csv [-1] put the ► on the right side of the page
+    if filename != sorted(os.listdir('./CSVs'))[-2] and filename != sorted(os.listdir('./CSVs'))[-1]:
         next_index = sorted(os.listdir('./CSVs')).index(filename) + 1
         rname = sorted(os.listdir('./CSVs'))[next_index].replace('./CSVs', '').replace('.csv', '')
         rightlink = f'{rname}.{title1}.{title2.replace(" ", ".")}.html'
+        html += '<div id="right-div" style="position: fixed; top: 50%; right: 0; transform: translateY(-50%); z-index: 9999;">'
         html += f'<span style="font-size:4em;"><a href="{rightlink}" style="text-decoration:none;color:#346c91;" onmouseover="this.style.color=\'#dc4848\'" onmouseout="this.style.color=\'#346c91\'">►</a></span></div>\n'
-    else:
+    # but if the file name is today's yyyy.mm.csv [-2], put the ☰ on the right side
+    elif filename == sorted(os.listdir('./CSVs'))[-2]:
+        html += '<div id="right-div" style="position: fixed; top: 50%; right: 0; transform: translateY(-50%); z-index: 9999;">'
         html += f'<span style="font-size:4em;"><a href="index.html" style="text-decoration:none;color:#346c91;" onmouseover="this.style.color=\'#dc4848\'" onmouseout="this.style.color=\'#346c91\'">☰</a></span></div>\n'
     html += f'<h1><a href="{page}" target="_blank" style="text-decoration:none;color:lightgray;font-weight:bold">{fire} {title} {fire}</a></h1>\n'
     html += '<table style="width: 75%; margin: 0 auto;">\n<tbody>\n'
@@ -206,6 +221,8 @@ with open(path, mode='w', encoding='utf-8') as f:
     html += 'Noto Color Emoji, Twemoji;\nmargin: 0; padding: 0;}\nh1 {\nfont-size: 2.5em; font-weight: normal; color: #464c8a;'
     html += '\ntext-align: center;text-shadow: 0px 0px 4px #464c8a, 0px 0px 4px #464c8a, 0px 0px 5px #464c8a;\n}</style>\n</head>\n<body>\n'
     html += f'<h1><a href="{page}" style="text-decoration:none;color:lightgray;font-weight:bold">{title}</a></h1>\n'
+    html += '<div id="left-div" style="position: fixed; top: 25px; left: 2%; z-index: 9999;">'
+    html += f'<span style="font-size:3em;"><a href="ALL.GREATAWAKENING.WIN.STICKIES.RELOADED.html" style="text-decoration:none;" onmouseover="this.style.textShadow=\'0px 0px 10px white\';" onmouseout="this.style.textShadow=\'none\'">{everything}</a></span></div>\n'
     html += '<div id="right-div" style="position: fixed; top: 25px; right: 2%; z-index: 9999;">'
     html += f'<span style="font-size:3em;"><a href="https://github.com/Fatality-GAW/fatality-gaw.github.io/archive/refs/heads/main.zip" style="text-decoration:none;" onmouseover="this.style.textShadow=\'0px 0px 10px white\';" onmouseout="this.style.textShadow=\'none\'">{download}</a></span></div>\n'
     html += '<div id="right-div" style="position: fixed; top: 125px; right: 2%; z-index: 9999;">'

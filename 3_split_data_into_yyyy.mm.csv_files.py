@@ -10,76 +10,122 @@ import csv
 import os
 from datetime import datetime
 
-
 month_dictionary = {}
 
 GAW_sticky_logs_objects = './WorkingCSVs/GAW_sticky_logs_objects.csv'
 
 GAW_sticky_posts_objects = './WorkingCSVs/GAW_sticky_posts_objects.csv'
 
-# Open the input CSV file for reading
-with open(GAW_sticky_logs_objects, 'r') as f:
-    reader = csv.reader(f)
+# 1: Open the GAW_sticky_logs_objects CSV file for reading
+with open(GAW_sticky_logs_objects, 'r') as GAW_sticky_logs_objects_file:
+    reader = csv.reader(GAW_sticky_logs_objects_file)
 
     # Initialize variables for keeping track of the current month and year
     current_month = None
     current_year = None
 
-    urls =[]
+    # Set up an array to hold data for the upcoming loop
+    urls = []
 
-    # Loop over the rows in the input CSV file
+    # Loop over the rows in the GAW_sticky_logs_objects CSV file
     for row in reader:
-        # Parse the date from the first column of the row
-        url = row[1]
-        date_string = row[0]
-        date = datetime.strptime(date_string, '%a %b %d %H:%M:%S GMT %Y')
+        # Get date (row[0]) & url (row[1]) from the row:
+        row_date = datetime.strptime(row[0], '%a %b %d %H:%M:%S GMT %Y')
+        row_url = row[1]
 
-        # Get the month and year from the date
-        month = f'{date.month:02d}'
-        year = date.year
+        # Get the month and year from the date:
+        this_month = f'{row_date.month:02d}'  # prefixes a 0 to single digit month
+        this_year = row_date.year
 
-        # If this is a new month or year, create a new output file for it
-        if month != current_month or year != current_year:
-            unique_urls = []
-            for url in urls:
-               if url not in unique_urls:
-                   unique_urls.append(url)
+        # If the month or year has changed, deal with it:
+        if this_month != current_month or this_year != current_year:
+            # If current month/year is not None, process it:
+            if current_month is not None and current_year is not None:
+                unique_urls_for_this_month = []
+                for url in urls:
+                    if url not in unique_urls_for_this_month:
+                        unique_urls_for_this_month.append(url)
 
-            month_dictionary[f'{current_year}.{current_month}'] = unique_urls
+                # Add the current_month's data to the dictionary:
+                month_dictionary[f'{current_year}.{current_month}'] = unique_urls_for_this_month
 
-            urls = []
-            # Update the current month, year, and output file
-            current_month = month
-            current_year = year
+                # Reset the array:
+                urls = []
 
-        # Write the current row to the current output file
-        urls.append(url)
+            # Update the current month, year:
+            current_month = this_month
+            current_year = this_year
 
-    # add the last dictionar:
-    unique_urls = []
+        # Add the current row_url to the urls array:
+        urls.append(row_url)
+
+    # Get the last array:
+    unique_urls_for_this_month = []
     for url in urls:
-        if url not in unique_urls:
-            unique_urls.append(url)
+        if url not in unique_urls_for_this_month:
+            unique_urls_for_this_month.append(url)
 
-    month_dictionary[f'{current_year}.{current_month}'] = unique_urls
+    # Add the last array to the dictionary:
+    month_dictionary[f'{current_year}.{current_month}'] = unique_urls_for_this_month
 
+
+# 2: Get all the sticky posts from the GAW_sticky_posts_objects
 gaw_sticky_posts = []
+
 if os.path.exists(GAW_sticky_posts_objects):
-    with open(GAW_sticky_posts_objects, 'r') as csv2:
-        reader = csv.reader(csv2)
+    with open(GAW_sticky_posts_objects, 'r') as GAW_sticky_posts_objects_file:
+        reader = csv.reader(GAW_sticky_posts_objects_file)
         for row in reader:
             gaw_sticky_posts.append(row)
     print(f'File \'{GAW_sticky_posts_objects}\' read.')
 
+
+# 3: Dump each monthly file
 for month in month_dictionary:
     if month == 'None.None':
         continue
-    file = f'./CSVs/{month}.csv'
-    month_urls = set(month_dictionary[month])
 
-    with open(file, 'w', newline='') as f:
-        writer = csv.writer(f)
-        for row in gaw_sticky_posts:
-            if row[2] in month_urls:
-                writer.writerow(row)
+    # Get the file name to output to:
+    file = f'./CSVs/{month}.csv'
+
+    # Create a set of urls of with this month:
+    month_urls = month_dictionary[month]
+
+    with open(file, 'w', newline='') as output_file:
+        writer = csv.writer(output_file)
+        for url in month_urls:
+            for row in gaw_sticky_posts:
+                if row[2] == url:
+                    writer.writerow(row)
+                    break
         print(f'wrote \'{file}\'')
+
+# 4: Dump a reversed mega csv (everything in 1 csv):
+all_unique_gaw_sticky_posts = []
+
+# Iterate through all the months again:
+for month in month_dictionary:
+    if month == 'None.None':
+        continue
+
+    # Create a set of urls of with this month:
+    month_urls = month_dictionary[month]
+
+    # Add the row to all_unique_gaw_sticky_posts
+    for url in month_urls:
+        for row in gaw_sticky_posts:
+            if row[2] == url:
+                if row not in all_unique_gaw_sticky_posts:
+                    all_unique_gaw_sticky_posts.append(row)
+                    break
+
+all_unique_gaw_sticky_posts = reversed(all_unique_gaw_sticky_posts)
+
+
+file = f'./CSVs/ALL.csv'
+
+with open(file, 'w', newline='') as output_file:
+    writer = csv.writer(output_file)
+    for row in all_unique_gaw_sticky_posts:
+        writer.writerow(row)
+    print(f'wrote \'{file}\'')
