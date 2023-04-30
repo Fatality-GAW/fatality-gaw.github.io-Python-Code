@@ -59,28 +59,24 @@ def scrape(url):
                 # get post id (first) and author (last)
                 post_data = article_element.find('div', {'class': 'post'})
                 if post_data:
-                    author = post_data.get('data-author').replace('\r\n', '').replace('\n\r', '').replace('\r', '').replace('\n',
-                                                                                                            '').strip()
-                    post_id = post_data.get('data-id').replace('\r\n', '').replace('\n\r', '').replace('\r', '').replace('\n',
-                                                                                                            '').strip()
+                    author = post_data.get('data-author').replace('\r\n', '').replace('\n\r', '').replace('\r', '').replace('\n','').strip()
+                    post_id = post_data.get('data-id').replace('\r\n', '').replace('\n\r', '').replace('\r', '').replace('\n','').strip()
 
                 # GMT Date
                 time_element = article_element.find('time', {'class': 'timeago'})
                 if time_element:
-                    time = time_element.get('title').replace('\r\n', '').replace('\n\r', '').replace('\r', '').replace('\n',
-                                                                                                            '').strip()
+                    time = time_element.get('title').replace('\r\n', '').replace('\n\r', '').replace('\r', '').replace('\n','').strip()
 
                 # vote #
                 vote_data = article_element.find('div', {'class': 'vote'})
                 if vote_data:
-                    vote = vote_data.text.replace('\r\n', '').replace('\n\r', '').replace('\r', '').replace('\n',
-                                                                                                            '').strip()
+                    vote = vote_data.text.replace('\r\n', '').replace('\n\r', '').replace('\r', '').replace('\n','').strip()
 
                 # title
                 title_data = article_element.find('a', {'class': 'title'})
                 if title_data:
-                    title = title_data.text.replace('\r\n', ' ').replace('\n\r', ' ').replace('\r', ' ').replace('\n',
-                                                                                                            ' ').strip()
+                    title = title_data.text.replace('\r\n', ' ').replace('\n\r', ' ').replace('\r', ' ').replace('\n',' ').strip()
+                    title = title.replace(';',':') # need to do this because some titles have ';' which breaks the output
                     title_words = title.split()
                     trimmed_title = " ".join(title_words).strip()
 
