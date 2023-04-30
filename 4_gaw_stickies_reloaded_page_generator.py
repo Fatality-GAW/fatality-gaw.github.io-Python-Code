@@ -15,6 +15,8 @@ import glob
 import os
 import re
 
+import pytz as pytz
+
 # Define a regular expression pattern to match the filename format
 pattern = re.compile(r'^(\d{4}\.\d{2})\.csv$')
 
@@ -29,8 +31,8 @@ for filename in os.listdir('./CSVs'):
     name_of_all_stickies_file = "ALL" # ALL.CSV's name "ALL" is defined in section 4: of 3_split_data_into_yyyy.mm.csv_files.py
     count = 0
     last_title = ""
-    # Get the current date and time
-    now = datetime.datetime.now()
+    # Get the current date and time in GMT (because that's what the posts are stamped at)
+    now = datetime.datetime.now(pytz.timezone('GMT'))
     # Get the month and year as two separate variables
     month = f'{now.month:02d}'
     year = now.year
@@ -40,7 +42,10 @@ for filename in os.listdir('./CSVs'):
     title1 = f'GREATAWAKENING.WIN'
     title2 = f'STICKIES RELOADED'
     title3 = f'STICKIES RELOADING..'
-    title = f'{time} {title1} {title2}'
+    if filename.startswith(f'{year}.{month}'):
+        title = f'{time} {title1} {title3}'
+    else:
+        title = f'{time} {title1} {title2}'
     everything = '🌐'
     fire = '🔥'
     new = '🆕'
@@ -195,7 +200,7 @@ for filename in os.listdir('./CSVs'):
     html += '</tbody>\n</table>\n</body>\n</html>'
 
     # Write HTML page to file
-    title = title.replace(" ", ".")
+    title = title.replace(title3, title2).replace(" ", ".")
     path = f'./Pages/{title}.html'
     with open(path, mode='w', encoding='utf-8') as f:
         f.write(html)
