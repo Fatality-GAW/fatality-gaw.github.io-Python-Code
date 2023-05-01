@@ -136,6 +136,7 @@ for filename in os.listdir('./CSVs'):
         if re.search(Qdrops1_regex, row[2]) or re.search(Qdrops2_regex, row[2]):
             if row[3] == 'meteorknife':
                 row_color = "rgb(230, 230, 230)"
+        # meteorknife's "Weekly Discussion Thread"
 
         # Check if data value matches regular expression for 'New Q'
         Qdrops1_regex = f'New Q'
