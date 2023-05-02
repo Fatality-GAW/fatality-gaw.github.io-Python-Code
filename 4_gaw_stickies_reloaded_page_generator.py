@@ -14,7 +14,6 @@ import datetime
 import glob
 import os
 import re
-
 import pytz as pytz
 
 # Define a regular expression pattern to match the filename format
@@ -23,9 +22,8 @@ pattern = re.compile(r'^(\d{4}\.\d{2})\.csv$')
 # Loop over all files in the current directory
 for filename in os.listdir('./CSVs'):
 
-    name_of_all_stickies_file = "ALL"  # ALL.CSV's name "ALL" is defined in section 4: of 3_split_data_into_yyyy.mm.csv_files.py
+    all_stickies_file = "ALL"  # ALL.CSV's name "ALL" is defined in section 4: of 3_split_data_into_yyyy.mm.csv_files.py
     count = 0
-    last_title = ""
     # Get the current date and time in GMT (because that's what the posts are stamped at)
     now = datetime.datetime.now(pytz.timezone('GMT'))
     # Get the month and year as two separate variables
@@ -33,22 +31,53 @@ for filename in os.listdir('./CSVs'):
     year = now.year
     # Format the month and year as a string with a leading zero for single digit months
     time = filename.replace('.csv', '')
-    page = f'https://GreatAwakening.win'
-    title1 = f'GREATAWAKENING.WIN'
-    title2 = f'STICKIES RELOADED'
-    title3 = f'STICKIES RELOADING..'
+    gaw_url = 'https://GreatAwakening.win'
+    download_url = 'https://github.com/Fatality-GAW/fatality-gaw.github.io/archive/refs/heads/main.zip'
+    changes_url = 'https://github.com/Fatality-GAW/fatality-gaw.github.io/commits/main'
+    code_url = 'https://github.com/Fatality-GAW/fatality-gaw.github.io-Python-Code'
+    title1 = 'GREATAWAKENING.WIN'
+    title2 = 'STICKIES RELOADED'
+    title3 = 'STICKIES RELOADING..'
     if filename.startswith(f'{year}.{month}'):
         title = f'{time} {title1} {title3}'
     else:
         title = f'{time} {title1} {title2}'
-    everything = '🌐'
     fire = '🔥'
     new = '🆕'
-    boom = '💥'
-    download = '📥'
-    changes = '📃'
-    code = '📑'
     reloading = '🔄'
+    boom = '💥'
+    all_link = '🌐'
+    download_link = '📥'
+    changes_link = '📃'
+    code_link = '📑'
+    fonts = 'Arial, sans-serif, Segoe UI Emoji, Noto Color Emoji, Twemoji'
+
+    # Colors
+    black = '#000000'
+    white = '#ffffff'
+    pale_grey = '#4d4848'
+    pale_red = '#dc4848'
+    pale_blue = '#346c91'
+    title_blue = '#4ca1e0'
+    dark_blue = '#305068'
+    bright_blue = '#77c5ff'
+    h1_color = '#d3d3d3'
+    h1_shadow = '#464c8a'
+    even_row = '#202020'
+    odd_row = '#111111'
+    # User Row Colors
+    general_chat = '#3a252f'
+    unleashed = '#2b2b46'
+    sunday_funnies = '#303630'
+    wins_of_day = '#3c3727'
+    extra_wins = '#3c2c36'
+    daily_discussion = '#330133'
+    hold_line = '#003333'
+    weekly_discussion = '#183718'
+    delta_discussion = '#321b26'
+    daily_prayer = '#68682b'
+    new_q = '#bbbbbb'
+
     # Read csv file and extract the columns of interest
     with open(f'./CSVs/{filename}', newline='') as f:
         reader = csv.reader(f)
@@ -59,7 +88,7 @@ for filename in os.listdir('./CSVs'):
 
     row_count = 0
     # Identify if currently reading ALL.CSV:
-    if time == name_of_all_stickies_file:
+    if time == all_stickies_file:
         row_count += 1
         # count how many rows have a title
         for index, row in enumerate(data):
@@ -67,75 +96,91 @@ for filename in os.listdir('./CSVs'):
                 row_count += 1
 
     for index, row in enumerate(data):
-        row[1] = f'{page}{row[1]}'
+        row[1] = f'{gaw_url}{row[1]}'
         # skip if there's no title (post is gone)
         if row[2].strip() == "":
             continue
 
         # switch up the count if this is the "ALL" stickies or not:
-        if time == name_of_all_stickies_file:
+        if time == all_stickies_file:
             row_count -= 1
         else:
             row_count += 1
 
         # Set alternating row colors
-        row_color = "#202020" if row_count % 2 == 0 else "#111111"
+        row_color = even_row if row_count % 2 == 0 else odd_row
 
-        # Check if data value matches regular expression for bubble_bursts' general chat
+        # Row_color for bubble_bursts 'General Chat for'
         chat_regex = r'General Chat for'
         if re.search(chat_regex, row[2]):
             if row[3] == 'bubble_bursts':
-                row_color = "#3a252f"
+                row_color = general_chat
 
-        # Check if data value matches regular expression for ashlanddog's team for unleashed / buzz
+        # Row_color for ashlanddog's & team's 'UNLEASHED...' & 'Time For A "Buzz"'
         unleashed_regex = r'UNLEASHED...'
         buzz_regex = r'Time For A "Buzz"'
         if re.search(unleashed_regex, row[2]) or re.search(buzz_regex, row[2]):
             if row[3] == 'ashlanddog' or row[3] == 'Taffy333' or row[3] == 'Nurarihyon_no_MAGA':
-                row_color = "rgb(43, 43, 70)"
+                row_color = unleashed
 
-        # Check if data value matches regular expression for Uncle_Fester's sunday funnies
+        # Row_color for Uncle_Fester's 'Sunday Funnies'
         sunday_regex = r'Sunday Funnies'
         if re.search(sunday_regex, row[2]):
             if row[3] == 'Uncle_Fester':
-                row_color = "#303630"
+                row_color = sunday_funnies
 
-        # Check if data value matches regular expression for WinsAnon's WINS OF THE DAY
+        # Row_color for WinsAnon's 'Wins of the Day:'
         wins_regex = r'Wins of the Day:'
         if re.search(wins_regex, row[2]):
             if row[3] == 'WinsAnon':
-                row_color = "rgb(60, 55, 39)"  # Change row color if condition is met
+                row_color = wins_of_day
 
-        # Check if data value matches regular expression for Puncake150's EXTRA WINS OF THE DAY
+        # Row_color for Puncake150's 'Extra Wins of the Day:'
         wins_regex = r'Extra Wins of the Day:'
         if re.search(wins_regex, row[2]):
             if row[3] == 'Puncake150':
-                row_color = "rgb(60, 44, 54)"  # Change row color if condition is met
+                row_color = extra_wins
 
-        # Check if data value matches regular expression for high-valyrian's Daily Discussion
+        # Row_color for meteorknife's & high-valyrian's 'Daily Discussion Thread'
         daily_regex = r'Daily Discussion Thread'
         if re.search(daily_regex, row[2]):
-            if row[3] == 'high-valyrian':
-                row_color = "#4d004d"
+            if row[3] == 'high-valyrian' or row[3] == 'meteorknife':
+                row_color = daily_discussion
 
-        # Check if data value matches regular expression for penisse's hold the line
-        hold_regex = f'HOLD THE LINE.'
+        # Row_color for penisse's 'HOLD THE LINE.'
+        hold_regex = r'HOLD THE LINE.'
         if re.search(hold_regex, row[2]):
             if row[3] == 'penisse':
-                row_color = "#003333"
+                row_color = hold_line
 
-        # Check if data value matches regular expression for penisse's 'Q Drops - '
-        Qdrops1_regex = f'Q Drop'
-        Qdrops2_regex = f'Q Drop'
-        if re.search(Qdrops1_regex, row[2]) or re.search(Qdrops2_regex, row[2]):
+        # Row_color for meteorknife's 'Weekly Discussion Thread'
+        weekly_discussion_regex = r'Weekly Discussion Thread'
+        if re.search(weekly_discussion_regex, row[2]):
             if row[3] == 'meteorknife':
-                row_color = "rgb(230, 230, 230)"
-        # meteorknife's "Weekly Discussion Thread"
+                row_color = weekly_discussion
 
-        # Check if data value matches regular expression for 'New Q'
+        # Row_color for ChronicMetamorphosis 'Q in 3D: The Daily Delta Discussion'
+        delta_discussion_regex = r'Q in 3D: The Daily Delta Discussion'
+        if re.search(delta_discussion_regex, row[2]):
+            if row[3] == 'ChronicMetamorphosis':
+                row_color = delta_discussion
+
+        # Row_color for Slechta5614 'DAILY PRAYER THREAD'
+        daily_prayer_regex = r'DAILY PRAYER THREAD'
+        if re.search(daily_prayer_regex, row[2].upper()):
+            if row[3] == 'Slechta5614':
+                row_color = daily_prayer
+
+        # Row_color for meteorknife's 'Q Drop'
+        Qdrops1_regex = f'Q Drop'
+        if re.search(Qdrops1_regex, row[2]):
+            if row[3] == 'meteorknife':
+                row_color = new_q
+
+        # Row_color for general 'New Q'
         Qdrops1_regex = f'New Q'
         if re.search(Qdrops1_regex, row[2]):
-            row_color = "rgb(230, 230, 230)"
+            row_color = new_q
 
         # Create table row
         table_row = f'<tr class="table_row" id="{row_count}" style="background-color: {row_color};" '
@@ -157,19 +202,6 @@ for filename in os.listdir('./CSVs'):
     html += f'<title>{fire} {title} {fire}</title>\n'
 
     # CSS
-    # Colors
-    fonts = 'Arial, sans-serif, Segoe UI Emoji, Noto Color Emoji, Twemoji'
-    black = '#000000'
-    white = '#ffffff'
-    pale_grey = '#4d4848'
-    pale_red = '#dc4848'
-    pale_blue = '#346c91'
-    title_blue = '#4ca1e0'
-    dark_blue = '#305068'
-    bright_blue = '#77c5ff'
-    h1_color = 'lightgray'
-    h1_shadow = '#464c8a'
-
     html += '<style>\n'
     html += 'body {\n' + f'background-color:{black};\nfont-family: {fonts}' +\
             ';\nmargin: 0;\npadding: 0;\n}\n'
@@ -204,7 +236,7 @@ for filename in os.listdir('./CSVs'):
             f'text-shadow: 0px 0px 10px {black};\n' + '}\n'
 
     html += '/* Transition Times */\n'
-    html += '.table_row td {\ntransition: all 1.5s;\n}\n'
+    html += '.table_row td {\ntransition: all 1.0s;\n}\n'
     html += '.table_row span, .table_row a {\ntransition: all 0.1s;\n}\n'
 
     html += '/* Default text settings for number col */\n'
@@ -268,7 +300,7 @@ for filename in os.listdir('./CSVs'):
                 f'onmouseout="this.style.color=\'{pale_blue}\'">☰</a></span></div>\n'
 
     # TITLE
-    html += f'<h1><a href="{page}" target="_blank">{fire} {title} {fire}</a></h1>\n'
+    html += f'<h1><a href="{gaw_url}" target="_blank">{fire} {title} {fire}</a></h1>\n'
 
     # TABLE
     html += '<table>\n<tbody>\n'
@@ -304,21 +336,21 @@ with open(path, mode='w', encoding='utf-8') as f:
     html += '<style>\nbody {\nbackground-color:black;\ncolor:#4d4848;\nfont-family: Arial, sans-serif, Segoe UI Emoji, '
     html += 'Noto Color Emoji, Twemoji;\nmargin: 0; padding: 0;}\nh1 {\nfont-size: 2.5em; font-weight: normal; color: #464c8a;'
     html += '\ntext-align: center;text-shadow: 0px 0px 4px #464c8a, 0px 0px 4px #464c8a, 0px 0px 5px #464c8a;\n}</style>\n</head>\n<body>\n'
-    html += f'<h1><a href="{page}" style="text-decoration:none;color:lightgray;font-weight:bold">{title}</a></h1>\n'
+    html += f'<h1><a href="{gaw_url}" style="text-decoration:none;color:lightgray;font-weight:bold">{title}</a></h1>\n'
     html += '<div id="left-div" style="position: fixed; top: 25px; left: 2%; z-index: 9999;">'
-    html += f'<span style="font-size:3em;"><a href="ALL.GREATAWAKENING.WIN.STICKIES.RELOADED.html" style="text-decoration:none;" onmouseover="this.style.textShadow=\'0px 0px 10px white\';" onmouseout="this.style.textShadow=\'none\'">{everything}</a></span></div>\n'
+    html += f'<span style="font-size:3em;"><a href="{all_stickies_file}.GREATAWAKENING.WIN.STICKIES.RELOADED.html" style="text-decoration:none;" onmouseover="this.style.textShadow=\'0px 0px 10px white\';" onmouseout="this.style.textShadow=\'none\'">{all_link}</a></span></div>\n'
     html += '<div id="right-div" style="position: fixed; top: 25px; right: 2%; z-index: 9999;">'
-    html += f'<span style="font-size:3em;"><a href="https://github.com/Fatality-GAW/fatality-gaw.github.io/archive/refs/heads/main.zip" style="text-decoration:none;" onmouseover="this.style.textShadow=\'0px 0px 10px white\';" onmouseout="this.style.textShadow=\'none\'">{download}</a></span></div>\n'
+    html += f'<span style="font-size:3em;"><a href="{download_url}" style="text-decoration:none;" onmouseover="this.style.textShadow=\'0px 0px 10px white\';" onmouseout="this.style.textShadow=\'none\'">{download_link}</a></span></div>\n'
     html += '<div id="right-div" style="position: fixed; top: 125px; right: 2%; z-index: 9999;">'
-    html += f'<span style="font-size:3em;"><a href="https://github.com/Fatality-GAW/fatality-gaw.github.io/commits/main" style="text-decoration:none;" onmouseover="this.style.textShadow=\'0px 0px 10px white\';" onmouseout="this.style.textShadow=\'none\'">{changes}</a></span></div>\n'
+    html += f'<span style="font-size:3em;"><a href="{changes_url}" style="text-decoration:none;" onmouseover="this.style.textShadow=\'0px 0px 10px white\';" onmouseout="this.style.textShadow=\'none\'">{changes_link}</a></span></div>\n'
     html += '<div id="right-div" style="position: fixed; top: 225px; right: 2%; z-index: 9999;">'
-    html += f'<span style="font-size:3em;"><a href="https://github.com/Fatality-GAW/fatality-gaw.github.io-Python-Code" style="text-decoration:none;" onmouseover="this.style.textShadow=\'0px 0px 10px white\';" onmouseout="this.style.textShadow=\'none\'">{code}</a></span></div>\n'
+    html += f'<span style="font-size:3em;"><a href="{code_url}" style="text-decoration:none;" onmouseover="this.style.textShadow=\'0px 0px 10px white\';" onmouseout="this.style.textShadow=\'none\'">{code_link}</a></span></div>\n'
     html += '<table style="width: 75%; margin: 0 auto;">\n<tbody>\n'
     for index, file in enumerate(files):
         fileTitle = file.replace('html', '').replace('.', ' ').replace(' ', '.', 1).replace('GREATAWAKENING WIN',
                                                                                             title1).strip()
         # Set alternating row colors
-        row_color = "#202020" if index % 2 == 0 else "#111111"
+        row_color = even_row if index % 2 == 0 else odd_row
         table_row = f'<tr style="background-color: {row_color}; border-bottom: 1px solid darkred; text-align:center;" '
         table_row += f'onmouseover="this.style.backgroundColor=\'#253147\'; this.childNodes[0].childNodes[0].style.color=\'#dc4848\'; this.childNodes[0].childNodes[0].style.textShadow=\'0px 0px 5px black\';" '
         table_row += f'onmouseout="this.style.backgroundColor=\'{row_color}\'; this.childNodes[0].childNodes[0].style.color=\'#4ca1e0\'; this.childNodes[0].childNodes[0].style.textShadow=\'none\';" '
