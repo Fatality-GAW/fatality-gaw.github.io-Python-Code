@@ -66,7 +66,7 @@ for filename in os.listdir('./CSVs'):
     even_row = '#202020'
     odd_row = '#111111'
     # User Row Colors
-    general_chat = '#3a252f'
+    general_chat = '#400f0f'
     unleashed = '#2b2b46'
     sunday_funnies = '#303630'
     wins_of_day = '#3c3727'
@@ -74,9 +74,10 @@ for filename in os.listdir('./CSVs'):
     daily_discussion = '#330133'
     hold_line = '#003333'
     weekly_discussion = '#183718'
-    delta_discussion = '#321b26'
+    delta_discussion = '#421128'
     daily_prayer = '#68682b'
-    new_q = '#bbbbbb'
+    anon_theater = '#04002f'
+    new_q = '#7d7b7b'
 
     # Read csv file and extract the columns of interest
     with open(f'./CSVs/{filename}', newline='') as f:
@@ -177,13 +178,18 @@ for filename in os.listdir('./CSVs'):
             if row[3] == 'meteorknife':
                 row_color = new_q
 
+        # Row_color for general 'Anon Theatre'
+        anon_theater_regex = r'Anon Theatre'
+        if re.search(anon_theater_regex, row[2]):
+            row_color = anon_theater
+
         # Row_color for general 'New Q'
         Qdrops1_regex = f'New Q'
         if re.search(Qdrops1_regex, row[2]):
             row_color = new_q
 
         # Create table row
-        table_row = f'<tr class="table_row" id="{row_count}" style="background-color: {row_color};" '
+        table_row = f'\t\t\t\t<tr class="table_row" id="{row_count}" style="background-color: {row_color};" '
         table_row += f'onclick="if (event.target.tagName == \'A\') return true; '
         table_row += f'window.open(\'{row[1]}\',\'_blank\',\'noopener noreferrer\');" >'
         table_row += f'<td class="number_col">{row_count}</td>'
@@ -197,75 +203,75 @@ for filename in os.listdir('./CSVs'):
     html = ''
     html += '<!DOCTYPE html>\n'
     html += '<html>\n'
-    html += '<head>\n'
-    html += '<meta charset="UTF-8">\n'
-    html += f'<title>{fire} {title} {fire}</title>\n'
+    html += '\t<head>\n'
+    html += '\t\t<meta charset="UTF-8">\n'
+    html += f'\t\t<title>{fire} {title} {fire}</title>\n'
 
     # CSS
-    html += '<style>\n'
-    html += 'body {\n' + f'background-color:{black};\nfont-family: {fonts}' +\
-            ';\nmargin: 0;\npadding: 0;\n}\n'
-    html += 'h1 {\nfont-size: 2.5em;\nfont-weight: normal;\ntext-align: center;' +\
-            f'\ntext-shadow: 0px 0px 4px {h1_shadow}, 0px 0px 4px {h1_shadow}, 0px 0px 5px {h1_shadow};' + '\n}\n'
-    html += 'h1 a {\ntext-decoration:none;\n' + f'color:{h1_color};\n' + 'font-weight:bold\n}\n'
+    html += '\t\t<style>\n'
+    html += '\t\t\tbody {\n\t\t\t\t' + f'background-color:{black};\n\t\t\t\tfont-family: {fonts}' +\
+            ';\n\t\t\t\tmargin: 0;\n\t\t\t\tpadding: 0;\n\t\t\t}\n'
+    html += '\t\t\th1 {\n\t\t\t\tfont-size: 2.5em;\n\t\t\t\tfont-weight: normal;\n\t\t\t\ttext-align: center;' +\
+            f'\n\t\t\t\ttext-shadow: 0px 0px 4px {h1_shadow}, 0px 0px 4px {h1_shadow}, 0px 0px 5px {h1_shadow};' + '\n\t\t\t}\n'
+    html += '\t\t\th1 a {\n\t\t\t\ttext-decoration:none;\n\t\t\t\t' + f'color:{h1_color};\n\t\t\t\t' + 'font-weight:bold\n\t\t\t}\n'
 
-    html += '/* Table Settings */\n'
-    html += 'table {\nwidth: 75%;\nmargin: 0 auto;\n}\n'
-    html += 'table, tbody, tr, td {\n' + f'border: 1px solid {black};\n' + 'border-collapse: collapse\n}\n'
+    html += '\t\t\t/* Table Settings */\n'
+    html += '\t\t\ttable {\n\t\t\t\twidth: 75%;\n\t\t\t\tmargin: 0 auto;\n\t\t\t}\n'
+    html += '\t\t\ttable, tbody, tr, td {\n\t\t\t\t' + f'border: 1px solid {black};\n\t\t\t\t' + 'border-collapse: collapse\n\t\t\t}\n'
 
-    html += '/* Column Defaults */\n'
-    html += '.number_col {\nbackground-color: black;\ntop: 0;\ntext-align: right;\nvertical-align: top;\n}\n'
-    html += '.detail_col {\nfont-weight:bold;\nfont-size:xx-small;\npadding:1em;\ntext-align:left;\n' + \
-            'vertical-align:top;\nwidth:10%;\nmax-width:10%;\nwhite-space:nowrap;\n}\n'
-    html += '.title_col {\npadding:1em;\npadding-left:5%;\npadding-right:5%;\n}\n'
-    html += '.title_col a {\ntext-decoration:none;\nfont-weight:bold;\n}\n'
+    html += '\t\t\t/* Column Defaults */\n'
+    html += '\t\t\t.number_col {\n\t\t\t\tbackground-color: black;\n\t\t\t\ttop: 0;\n\t\t\t\ttext-align: right;\n\t\t\t\tvertical-align: top;\n\t\t\t}\n'
+    html += '\t\t\t.detail_col {\n\t\t\t\tfont-weight:bold;\n\t\t\t\tfont-size:xx-small;\n\t\t\t\tpadding:1em;\n\t\t\t\ttext-align:left;\n\t\t\t\t' + \
+            'vertical-align:top;\n\t\t\t\twidth:10%;\n\t\t\t\tmax-width:10%;\n\t\t\t\twhite-space:nowrap;\n\t\t\t}\n'
+    html += '\t\t\t.title_col {\n\t\t\t\tpadding:1em;\n\t\t\t\tpadding-left:5%;\n\t\t\t\tpadding-right:5%;\n\t\t\t}\n'
+    html += '\t\t\t.title_col a {\n\t\t\t\ttext-decoration:none;\n\t\t\t\tfont-weight:bold;\n\t\t\t}\n'
 
-    html += '/* Hovering over a row */\n'
-    html += '        /* Number Column */\n'
-    html += '.table_row:hover td:first-child {\n' + f'color: {white};\n' + \
-            f'text-shadow: 0px 0px 10px {black};\n' + '}\n'
-    html += '        /* Detail Column */\n'
-    html += '                          /* Name Color */\n'
-    html += '.table_row:hover td:nth-child(2) span {\n' + f'color: {bright_blue};\n' + \
-            f'text-shadow: 0px 0px 10px {black};\n' + '}\n'
-    html += '                          /* Time Color */\n'
-    html += '.table_row:hover td:nth-child(2) {\n' + f'color: {white};\n' + \
-            f'text-shadow: 0px 0px 10px {black};\n' + '}\n'
-    html += '        /* Title Column */\n'
-    html += '.table_row:hover td:nth-child(3) a {\n' + f'color: {pale_red};\n' + \
-            f'text-shadow: 0px 0px 10px {black};\n' + '}\n'
+    html += '\t\t\t/* Hovering over a row */\n'
+    html += '\t\t\t\t/* Number Column */\n'
+    html += '\t\t\t.table_row:hover td:first-child {\n\t\t\t\t' + f'color: {white};\n\t\t\t\t' + \
+            f'text-shadow: 0px 0px 10px {black};\n\t\t\t' + '}\n'
+    html += '\t\t\t\t/* Detail Column */\n'
+    html += '\t\t\t\t\t\t/* Name Color */\n'
+    html += '\t\t\t.table_row:hover td:nth-child(2) span {\n\t\t\t\t' + f'color: {bright_blue};\n\t\t\t\t' + \
+            f'text-shadow: 0px 0px 10px {black};\n\t\t\t' + '}\n'
+    html += '\t\t\t\t\t\t/* Time Color */\n'
+    html += '\t\t\t.table_row:hover td:nth-child(2) {\n\t\t\t\t' + f'color: {white};\n\t\t\t\t' + \
+            f'text-shadow: 0px 0px 10px {black};\n\t\t\t' + '}\n'
+    html += '\t\t\t\t/* Title Column */\n'
+    html += '\t\t\t.table_row:hover td:nth-child(3) a {\n\t\t\t\t' + f'color: {pale_red};\n\t\t\t\t' + \
+            f'text-shadow: 0px 0px 10px {black};\n\t\t\t' + '}\n'
 
-    html += '/* Transition Times */\n'
-    html += '.table_row td {\ntransition: all 1.0s;\n}\n'
-    html += '.table_row span, .table_row a {\ntransition: all 0.1s;\n}\n'
+    html += '\t\t\t/* Transition Times */\n'
+    html += '\t\t\t.table_row td {\n\t\t\t\ttransition: all 1.0s;\n\t\t\t}\n'
+    html += '\t\t\t.table_row span, .table_row a {\n\t\t\t\ttransition: all 0.1s;\n\t\t\t}\n'
 
-    html += '/* Default text settings for number col */\n'
-    html += '.table_row td:first-child {\n' + f'color: {pale_grey};\n' + '}\n'
+    html += '\t\t\t/* Default text settings for number col */\n'
+    html += '\t\t\t.table_row td:first-child {\n\t\t\t\t' + f'color: {pale_grey};\n\t\t\t' + '}\n'
 
-    html += '/* Default text settings for detail col */\n'
-    html += '.table_row td:nth-child(2) span {\n' + f'color: {dark_blue}; /* the author */\n' + '}\n'
-    html += '.table_row td:nth-child(2) {\n' + f'color: {pale_grey}; /* the time */\n' + '}\n'
+    html += '\t\t\t/* Default text settings for detail col */\n'
+    html += '\t\t\t.table_row td:nth-child(2) span {\n\t\t\t\t' + f'color: {dark_blue}; /* the author */\n\t\t\t' + '}\n'
+    html += '\t\t\t.table_row td:nth-child(2) {\n\t\t\t\t' + f'color: {pale_grey}; /* the time */\n\t\t\t' + '}\n'
 
-    html += '/* Default text settings for title col */\n'
-    html += '.table_row td:nth-child(3) a {\n' + f'color: {title_blue};\n' + '}\n'
+    html += '\t\t\t/* Default text settings for title col */\n'
+    html += '\t\t\t.table_row td:nth-child(3) a {\n\t\t\t\t' + f'color: {title_blue};\n\t\t\t' + '}\n'
 
-    html += '/* on-screen buttons */\n'
-    html += '#menu-div {\nposition: fixed;\ntop: 125px;\nright: 0%;\nz-index: 9999;\n}\n'
-    html += '#left-div {\nposition: fixed;\ntop: 50%;\nleft: 0%;\ntransform: translateY(-50%);\nz-index: 9999;\n}\n'
-    html += '#right-div {\nposition: fixed;\ntop: 50%;\nright: 0%;\ntransform: translateY(-50%);\nz-index: 9999;\n}\n'
-    html += '#menu-div span,\n#left-div span,\n#right-div span {\nfont-size:4em;\n}\n'
-    html += '#menu-div span a,\n#left-div span a,\n#right-div span a {\ntext-decoration:none;\n' + \
-            f'color:{pale_blue}' + ';\n}\n'
-    html += '</style>\n'
-    html += '</head>\n'
+    html += '\t\t\t/* on-screen buttons */\n'
+    html += '\t\t\t#menu-div {\n\t\t\t\tposition: fixed;\n\t\t\t\ttop: 125px;\n\t\t\t\tright: 0%;\n\t\t\t\tz-index: 9999;\n\t\t\t}\n'
+    html += '\t\t\t#left-div {\n\t\t\t\tposition: fixed;\n\t\t\t\ttop: 50%;\n\t\t\t\tleft: 0%;\n\t\t\t\ttransform: translateY(-50%);\n\t\t\t\tz-index: 9999;\n\t\t\t}\n'
+    html += '\t\t\t#right-div {\n\t\t\t\tposition: fixed;\n\t\t\t\ttop: 50%;\n\t\t\t\tright: 0%;\n\t\t\t\ttransform: translateY(-50%);\n\t\t\t\tz-index: 9999;\n\t\t\t}\n'
+    html += '\t\t\t#menu-div span,\n\t\t\t#left-div span,\n\t\t\t#right-div span {\n\t\t\t\tfont-size:4em;\n\t\t\t}\n'
+    html += '\t\t\t#menu-div span a,\n\t\t\t#left-div span a,\n\t\t\t#right-div span a {\n\t\t\t\ttext-decoration:none;\n\t\t\t\t' + \
+            f'color:{pale_blue}' + ';\n\t\t\t}\n'
+    html += '\t\t</style>\n'
+    html += '\t</head>\n'
 
     # BODY
-    html += '<body>\n'
+    html += '\t<body>\n'
 
     # UPPER RIGHT SIDE MENU LINK ☰
     # if the file name isn't 2020.08.csv [0], or today's yyyy.mm.csv [-2] put the upper right side menu link:
     if filename != sorted(os.listdir('./CSVs'))[0] and filename != sorted(os.listdir('./CSVs'))[-2]:
-        html += '<div id="menu-div"><span><a href="index.html"' + \
+        html += '\t\t<div id="menu-div"><span><a href="index.html"' + \
                 f'onmouseover="this.style.color=\'{pale_red}\'"' + \
                 f'onmouseout="this.style.color=\'{pale_blue}\'">☰</a></span></div>\n'
 
@@ -275,12 +281,12 @@ for filename in os.listdir('./CSVs'):
         previous_index = sorted(os.listdir('./CSVs')).index(filename) - 1
         lname = sorted(os.listdir('./CSVs'))[previous_index].replace('./CSVs', '').replace('.csv', '')
         leftlink = f'{lname}.{title1}.{title2.replace(" ", ".")}.html'
-        html += f'<div id="left-div"><span><a href="{leftlink}"' + \
+        html += f'\t\t<div id="left-div"><span><a href="{leftlink}"' + \
                 f'onmouseover="this.style.color=\'{pale_red}\'"' + \
                 f'onmouseout="this.style.color=\'{pale_blue}\'">◄</a></span></div>\n'
     # but if the file name is 2020.08.csv [0], put the ☰ on the left side
     elif filename == sorted(os.listdir('./CSVs'))[0]:
-        html += f'<div id="left-div"><span><a href="index.html"' + \
+        html += f'\t\t<div id="left-div"><span><a href="index.html"' + \
                 f'onmouseover="this.style.color=\'{pale_red}\'"' + \
                 f'onmouseout="this.style.color=\'{pale_blue}\'">☰</a></span></div>\n'
 
@@ -290,25 +296,25 @@ for filename in os.listdir('./CSVs'):
         next_index = sorted(os.listdir('./CSVs')).index(filename) + 1
         rname = sorted(os.listdir('./CSVs'))[next_index].replace('./CSVs', '').replace('.csv', '')
         rightlink = f'{rname}.{title1}.{title2.replace(" ", ".")}.html'
-        html += f'<div id="right-div"><span><a href="{rightlink}"' + \
+        html += f'\t\t<div id="right-div"><span><a href="{rightlink}"' + \
                 f'onmouseover="this.style.color=\'{pale_red}\'"' + \
                 f'onmouseout="this.style.color=\'{pale_blue}\'">►</a></span></div>\n'
     # but if the file name is today's yyyy.mm.csv [-2], put the ☰ on the right side
     elif filename == sorted(os.listdir('./CSVs'))[-2]:
-        html += f'<div id="right-div"><span><a href="index.html"' + \
+        html += f'\t\t<div id="right-div"><span><a href="index.html"' + \
                 f'onmouseover="this.style.color=\'{pale_red}\'"' + \
                 f'onmouseout="this.style.color=\'{pale_blue}\'">☰</a></span></div>\n'
 
     # TITLE
-    html += f'<h1><a href="{gaw_url}" target="_blank">{fire} {title} {fire}</a></h1>\n'
+    html += f'\t\t<h1><a href="{gaw_url}" target="_blank">{fire} {title} {fire}</a></h1>\n'
 
     # TABLE
-    html += '<table>\n<tbody>\n'
+    html += '\t\t<table>\n\t\t\t<tbody>\n'
     html += ''.join(table_rows)
-    html += '</tbody>\n</table>\n'
+    html += '\t\t\t</tbody>\n\t\t</table>\n'
 
     # FOOTER
-    html += '</body>\n</html>'
+    html += '\t</body>\n</html>\n'
 
     # Write HTML page to file
     title = title.replace(title3, title2).replace(" ", ".")
