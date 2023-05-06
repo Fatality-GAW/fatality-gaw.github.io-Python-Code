@@ -381,7 +381,7 @@ for csv_file in os.listdir('./CSVs'):
         previous_index = sorted(os.listdir('./CSVs')).index(csv_file) - 1
         lname = sorted(os.listdir('./CSVs'))[previous_index].replace('./CSVs', '').replace('.csv', '')
         leftlink = f'{lname}.{title1}.{title2.replace(" ", ".")}.html'
-        html += '\t\t<div id="left-div"><span><a href="{leftlink}" ' + \
+        html += f'\t\t<div id="left-div"><span><a href="{leftlink}" ' + \
                 f'onmouseover="this.style.color=\'{pale_red}\'" ' + \
                 f'onmouseout="this.style.color=\'{pale_blue}\'">◄</a></span></div>\n'
     # But if the file name is 2020.08.csv [0], put the ☰ on the left side of the page:
@@ -395,7 +395,7 @@ for csv_file in os.listdir('./CSVs'):
         next_index = sorted(os.listdir('./CSVs')).index(csv_file) + 1
         rname = sorted(os.listdir('./CSVs'))[next_index].replace('./CSVs', '').replace('.csv', '')
         rightlink = f'{rname}.{title1}.{title2.replace(" ", ".")}.html'
-        html += '\t\t<div id="right-div"><span><a href="{rightlink}" ' + \
+        html += f'\t\t<div id="right-div"><span><a href="{rightlink}" ' + \
                 f'onmouseover="this.style.color=\'{pale_red}\'" ' + \
                 f'onmouseout="this.style.color=\'{pale_blue}\'">►</a></span></div>\n'
     # But if the file name is today's yyyy.mm.csv [-2], put the ☰ on the right side of the page:
@@ -551,7 +551,7 @@ for index, html_file_name in enumerate(html_files):
                 f'onmouseout="this.style.backgroundColor=\'{row_color}\'; ' + \
                 f'this.childNodes[0].childNodes[0].style.color=\'{title_blue}\'; ' + \
                 f'this.childNodes[0].childNodes[0].style.textShadow=\'{none}\';" ' + \
-                f'onclick="window.location.href=\'./{html_file_name}\'"; >'
+                f'onclick="window.location.href=\'./{html_file_name}\'">'
     # If this is the row for the first page
     if is_first_page:
         # If name starts with this year/month's yyyy.MM pattern, it needs Reloading icons and 'reloading..' text:
