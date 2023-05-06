@@ -18,6 +18,8 @@
             Then you only have to run it once every 125 stickies (you can check more if you want)
 
     Optional: Delete GAW_sticky_logs_objects file to erase all the data and start scraping a new dataset.
+
+    NOTE: If the format of the posts change, this code needs to be re-done.
 """
 import csv
 import os
@@ -26,7 +28,6 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 import threading
 import queue
-
 
 NUM_THREADS = 50
 CHECK_RESULTS_INTERVAL = 0.1
@@ -40,8 +41,9 @@ if os.path.exists(GAW_sticky_logs_objects):
     with open(GAW_sticky_logs_objects, 'r') as f:
         reader = csv.reader(f)
         for row in reader:
-            stickies_time.append([row[0], row[1]]);
+            stickies_time.append([row[0], row[1]])
     print(f'File \'{GAW_sticky_logs_objects}\' read.')
+
 
 # Define a function that will retrieve the logs for a single page
 def get_logs(url, stickies_time, page_no, last_page_no):
@@ -59,11 +61,13 @@ def get_logs(url, stickies_time, page_no, last_page_no):
         if span_tags:
             time = span_tags[0].get('title').strip()
 
-        i_tags = div.find_all('i')  # Get all the i tags in this div
-        if i_tags:  # If there are i tags
-            last_i_tag = i_tags[-1]  # Get the last i tag
+        i_tags = div.find_all('i')  # Get all the <I> tags in this div
+        if i_tags:  # If there are <I> tags
+            last_i_tag = i_tags[-1]  # Get the last <I>> tag
             if last_i_tag.find('a').has_attr('href'):
-                href = last_i_tag.find('a').get('href').replace('\r\n', '').replace('\n\r', '').replace('\r', '').replace('\n', '').strip()
+                href = last_i_tag.find('a').get('href').replace('\r\n', '').replace('\n\r', '').replace('\r',
+                                                                                                        '').replace(
+                    '\n', '').strip()
 
         row = [time, href]
         if row not in stickies_time:
@@ -78,11 +82,13 @@ def get_logs(url, stickies_time, page_no, last_page_no):
         output += f'\tSkipped Records:\n\t\t{skipped} were already retrieved\n'
     print(output)
 
+
 # Define a function that will retrieve the logs for multiple pages
 def get_logs_for_range(first_sticky_page_no, last_sticky_page_no, stickies_time, results_queue):
     for page_no in range(first_sticky_page_no, last_sticky_page_no + 1):
         url = f'https://greatawakening.win/logs?page={page_no}&type=sticky'
         get_logs(url, stickies_time, page_no, last_sticky_page_no)
+
 
 # Create a queue for the results
 results_queue = queue.Queue()
@@ -108,7 +114,6 @@ for t in thread_list:
 # Check the results queue until all the threads have finished
 while not results_queue.empty():
     print(results_queue.get())
-
 
 # Sort the dictionary
 sorted_stickies_time = sorted(stickies_time, key=lambda x: datetime.strptime(x[0], '%a %b %d %H:%M:%S %Z %Y'))

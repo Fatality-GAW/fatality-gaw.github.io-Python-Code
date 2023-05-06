@@ -38,9 +38,9 @@ while True:
         print('NO NEW STICKIES TO SCRAPE!')
 
     if os.path.exists(GAW_sticky_posts_objects) and sticky_posts_size != os.path.getsize(GAW_sticky_posts_objects):
-        print(f'GENERATING MONTHLY CSV FILES:')
+        print(f'GENERATING CSV FILES:')
         subprocess.run(['python3', '3_split_data_into_yyyy.mm.csv_files.py'])
-        print(f'GENERATING STICKIES RELOADED HTML FILES:')
+        print(f'GENERATING HTML FILES:')
         subprocess.run(['python3', '4_gaw_stickies_reloaded_page_generator.py'])
 
     retryTime = datetime.now() + timedelta(seconds=RETRY_SECONDS)

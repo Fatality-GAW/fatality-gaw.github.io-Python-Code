@@ -6,12 +6,14 @@
 
     Step 2: run the script, it will fetch all urls of the stickies and put them in the GAW_sticky_post_objects.csv.
 
-    Step 3: run this a few times to make sure that you have all the data, it will say:
+    Step 3: run this a few times to make sure that you have all the data, when you do, it will output only this:
         File './WorkingCSVs/GAW_sticky_logs_objects.csv' read.
         File './WorkingCSVs/GAW_sticky_posts_objects.csv' read.
         File './WorkingCSVs/GAW_sticky_posts_objects.csv' written.
 
     Optional: Delete GAW_sticky_post_objects file to erase all the data and start scraping a new dataset.
+
+    NOTE: If the format of the posts change, this code needs to be re-done.
 """
 
 import csv
@@ -19,7 +21,6 @@ import os
 import requests
 from bs4 import BeautifulSoup
 from concurrent.futures import ThreadPoolExecutor
-
 
 GAW_sticky_logs_objects = './WorkingCSVs/GAW_sticky_logs_objects.csv'
 
@@ -59,24 +60,29 @@ def scrape(url):
                 # get post id (first) and author (last)
                 post_data = article_element.find('div', {'class': 'post'})
                 if post_data:
-                    author = post_data.get('data-author').replace('\r\n', '').replace('\n\r', '').replace('\r', '').replace('\n','').strip()
-                    post_id = post_data.get('data-id').replace('\r\n', '').replace('\n\r', '').replace('\r', '').replace('\n','').strip()
+                    author = post_data.get('data-author').replace('\r\n', '').replace('\n\r', ''). \
+                        replace('\r', '').replace('\n', '').strip()
+                    post_id = post_data.get('data-id').replace('\r\n', '').replace('\n\r', ''). \
+                        replace('\r', '').replace('\n', '').strip()
 
                 # GMT Date
                 time_element = article_element.find('time', {'class': 'timeago'})
                 if time_element:
-                    time = time_element.get('title').replace('\r\n', '').replace('\n\r', '').replace('\r', '').replace('\n','').strip()
+                    time = time_element.get('title').replace('\r\n', '').replace('\n\r', '').replace('\r', ''). \
+                        replace('\n', '').strip()
 
                 # vote #
                 vote_data = article_element.find('div', {'class': 'vote'})
                 if vote_data:
-                    vote = vote_data.text.replace('\r\n', '').replace('\n\r', '').replace('\r', '').replace('\n','').strip()
+                    vote = vote_data.text.replace('\r\n', '').replace('\n\r', '').replace('\r', ''). \
+                        replace('\n', '').strip()
 
                 # title
                 title_data = article_element.find('a', {'class': 'title'})
                 if title_data:
-                    title = title_data.text.replace('\r\n', ' ').replace('\n\r', ' ').replace('\r', ' ').replace('\n',' ').strip()
-                    title = title.replace(';',':') # need to do this because some titles have ';' which breaks the output
+                    title = title_data.text.replace('\r\n', ' ').replace('\n\r', ' ').replace('\r', ' '). \
+                        replace('\n', ' ').strip()
+                    title = title.replace(';', ':')  # Some titles have ';' which breaks the output
                     title_words = title.split()
                     trimmed_title = " ".join(title_words).strip()
 
