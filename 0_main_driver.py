@@ -11,10 +11,10 @@ import time
 import pytz
 
 RETRY_SECONDS = 3600  # every hour
-
 GAW_sticky_logs_objects = './WorkingCSVs/GAW_sticky_logs_objects.csv'
-
 GAW_sticky_posts_objects = './WorkingCSVs/GAW_sticky_posts_objects.csv'
+
+# Get the file sizes:
 
 sticky_logs_size = 0
 if os.path.exists(GAW_sticky_logs_objects):
@@ -25,15 +25,18 @@ if os.path.exists(GAW_sticky_posts_objects):
     sticky_posts_size = os.path.getsize(GAW_sticky_posts_objects)
 
 
+# Scraper loop
 while True:
-
     print(f'SCRAPING STICKY LOGS:')
     subprocess.run(['python3', '1_scrape_gaw_sticky_logs_objects.py'])
+
     if os.path.exists(GAW_sticky_logs_objects) and sticky_logs_size != os.path.getsize(GAW_sticky_logs_objects):
         print(f'SCRAPING STICKY POSTS:')
         subprocess.run(['python3', '2_scrape_gaw_sticky_post_objects.py'])
+
     else:
         print('NO NEW STICKIES TO SCRAPE!')
+
     if os.path.exists(GAW_sticky_posts_objects) and sticky_posts_size != os.path.getsize(GAW_sticky_posts_objects):
         print(f'GENERATING MONTHLY CSV FILES:')
         subprocess.run(['python3', '3_split_data_into_yyyy.mm.csv_files.py'])

@@ -11,7 +11,6 @@
 """
 import csv
 import datetime
-import glob
 import os
 import re
 import pytz as pytz
@@ -206,62 +205,139 @@ for filename in os.listdir('./CSVs'):
     html += '\t<head>\n'
     html += '\t\t<meta charset="UTF-8">\n'
     html += f'\t\t<title>{fire} {title} {fire}</title>\n'
-
-    # CSS
     html += '\t\t<style>\n'
-    html += '\t\t\tbody {\n\t\t\t\t' + f'background-color:{black};\n\t\t\t\tfont-family: {fonts}' +\
-            ';\n\t\t\t\tmargin: 0;\n\t\t\t\tpadding: 0;\n\t\t\t}\n'
-    html += '\t\t\th1 {\n\t\t\t\tfont-size: 2.5em;\n\t\t\t\tfont-weight: normal;\n\t\t\t\ttext-align: center;' +\
-            f'\n\t\t\t\ttext-shadow: 0px 0px 4px {h1_shadow}, 0px 0px 4px {h1_shadow}, 0px 0px 5px {h1_shadow};' + '\n\t\t\t}\n'
-    html += '\t\t\th1 a {\n\t\t\t\ttext-decoration:none;\n\t\t\t\t' + f'color:{h1_color};\n\t\t\t\t' + 'font-weight:bold\n\t\t\t}\n'
-
-    html += '\t\t\t/* Table Settings */\n'
-    html += '\t\t\ttable {\n\t\t\t\twidth: 75%;\n\t\t\t\tmargin: 0 auto;\n\t\t\t}\n'
-    html += '\t\t\ttable, tbody, tr, td {\n\t\t\t\t' + f'border: 1px solid {black};\n\t\t\t\t' + 'border-collapse: collapse\n\t\t\t}\n'
-
-    html += '\t\t\t/* Column Defaults */\n'
-    html += '\t\t\t.number_col {\n\t\t\t\tbackground-color: black;\n\t\t\t\ttop: 0;\n\t\t\t\ttext-align: right;\n\t\t\t\tvertical-align: top;\n\t\t\t}\n'
-    html += '\t\t\t.detail_col {\n\t\t\t\tfont-weight:bold;\n\t\t\t\tfont-size:xx-small;\n\t\t\t\tpadding:1em;\n\t\t\t\ttext-align:left;\n\t\t\t\t' + \
-            'vertical-align:top;\n\t\t\t\twidth:10%;\n\t\t\t\tmax-width:10%;\n\t\t\t\twhite-space:nowrap;\n\t\t\t}\n'
-    html += '\t\t\t.title_col {\n\t\t\t\tpadding:1em;\n\t\t\t\tpadding-left:5%;\n\t\t\t\tpadding-right:5%;\n\t\t\t}\n'
-    html += '\t\t\t.title_col a {\n\t\t\t\ttext-decoration:none;\n\t\t\t\tfont-weight:bold;\n\t\t\t}\n'
-
-    html += '\t\t\t/* Hovering over a row */\n'
-    html += '\t\t\t\t/* Number Column */\n'
-    html += '\t\t\t.table_row:hover td:first-child {\n\t\t\t\t' + f'color: {white};\n\t\t\t\t' + \
-            f'text-shadow: 0px 0px 10px {black};\n\t\t\t' + '}\n'
-    html += '\t\t\t\t/* Detail Column */\n'
-    html += '\t\t\t\t\t\t/* Name Color */\n'
-    html += '\t\t\t.table_row:hover td:nth-child(2) span {\n\t\t\t\t' + f'color: {bright_blue};\n\t\t\t\t' + \
-            f'text-shadow: 0px 0px 10px {black};\n\t\t\t' + '}\n'
-    html += '\t\t\t\t\t\t/* Time Color */\n'
-    html += '\t\t\t.table_row:hover td:nth-child(2) {\n\t\t\t\t' + f'color: {white};\n\t\t\t\t' + \
-            f'text-shadow: 0px 0px 10px {black};\n\t\t\t' + '}\n'
-    html += '\t\t\t\t/* Title Column */\n'
-    html += '\t\t\t.table_row:hover td:nth-child(3) a {\n\t\t\t\t' + f'color: {pale_red};\n\t\t\t\t' + \
-            f'text-shadow: 0px 0px 10px {black};\n\t\t\t' + '}\n'
-
-    html += '\t\t\t/* Transition Times */\n'
-    html += '\t\t\t.table_row td {\n\t\t\t\ttransition: all 1.0s;\n\t\t\t}\n'
-    html += '\t\t\t.table_row span, .table_row a {\n\t\t\t\ttransition: all 0.1s;\n\t\t\t}\n'
-
-    html += '\t\t\t/* Default text settings for number col */\n'
-    html += '\t\t\t.table_row td:first-child {\n\t\t\t\t' + f'color: {pale_grey};\n\t\t\t' + '}\n'
-
-    html += '\t\t\t/* Default text settings for detail col */\n'
-    html += '\t\t\t.table_row td:nth-child(2) span {\n\t\t\t\t' + f'color: {dark_blue}; /* the author */\n\t\t\t' + '}\n'
-    html += '\t\t\t.table_row td:nth-child(2) {\n\t\t\t\t' + f'color: {pale_grey}; /* the time */\n\t\t\t' + '}\n'
-
-    html += '\t\t\t/* Default text settings for title col */\n'
-    html += '\t\t\t.table_row td:nth-child(3) a {\n\t\t\t\t' + f'color: {title_blue};\n\t\t\t' + '}\n'
-
-    html += '\t\t\t/* on-screen buttons */\n'
-    html += '\t\t\t#menu-div {\n\t\t\t\tposition: fixed;\n\t\t\t\ttop: 125px;\n\t\t\t\tright: 0%;\n\t\t\t\tz-index: 9999;\n\t\t\t}\n'
-    html += '\t\t\t#left-div {\n\t\t\t\tposition: fixed;\n\t\t\t\ttop: 50%;\n\t\t\t\tleft: 0%;\n\t\t\t\ttransform: translateY(-50%);\n\t\t\t\tz-index: 9999;\n\t\t\t}\n'
-    html += '\t\t\t#right-div {\n\t\t\t\tposition: fixed;\n\t\t\t\ttop: 50%;\n\t\t\t\tright: 0%;\n\t\t\t\ttransform: translateY(-50%);\n\t\t\t\tz-index: 9999;\n\t\t\t}\n'
-    html += '\t\t\t#menu-div span,\n\t\t\t#left-div span,\n\t\t\t#right-div span {\n\t\t\t\tfont-size:4em;\n\t\t\t}\n'
-    html += '\t\t\t#menu-div span a,\n\t\t\t#left-div span a,\n\t\t\t#right-div span a {\n\t\t\t\ttext-decoration:none;\n\t\t\t\t' + \
-            f'color:{pale_blue}' + ';\n\t\t\t}\n'
+    html += '\t\t\tbody {\n' + \
+            f'\t\t\t\tbackground-color:{black};\n' + \
+            f'\t\t\t\tfont-family: {fonts};\n' + \
+            f'\t\t\t\tmargin: 0;\n' + \
+            f'\t\t\t\tpadding: 0;\n' + \
+            '\t\t\t}\n'
+    html += '\t\t\th1 {\n' + \
+            f'\t\t\t\tfont-size: 2.5em;\n' + \
+            f'\t\t\t\tfont-weight: normal;\n' + \
+            f'\t\t\t\ttext-align: center;\n' +\
+            f'\n\t\t\t\ttext-shadow: 0px 0px 4px {h1_shadow}, 0px 0px 4px {h1_shadow}, 0px 0px 5px {h1_shadow};\n' + \
+            '\t\t\t}\n'
+    html += '\t\t\th1 a {\n' + \
+            f'\t\t\t\ttext-decoration: none;\n' + \
+            f'\t\t\t\tcolor: {h1_color};\n' + \
+            f'\t\t\t\tfont-weight: bold;\n' + \
+            '\t\t\t}\n'
+    html += '\t\t\t/* Table Settings */\n' + \
+            '\t\t\ttable {\n' + \
+            f'\t\t\t\twidth: 75%;\n' + \
+            f'\t\t\t\tmargin: 0 auto;\n' + \
+            '\t\t\t}\n'
+    html += '\t\t\ttable,\n' + \
+            '\t\t\ttbody,\n' + \
+            '\t\t\ttr,\n' + \
+            '\t\t\ttd {\n' + \
+            f'\t\t\t\tborder: 1px solid {black};\n' + \
+            '\t\t\t\tborder-collapse: collapse;\n' + \
+            '\t\t\t}\n'
+    html += '\t\t\t/* Column Defaults */\n' + \
+            '\t\t\t.number_col {\n' + \
+            '\t\t\t\tbackground-color: black;\n' + \
+            '\t\t\t\ttop: 0;\n' + \
+            '\t\t\t\ttext-align: right;\n' + \
+            '\t\t\t\tvertical-align: top;\n' + \
+            '\t\t\t}\n'
+    html += '\t\t\t.detail_col {\n' + \
+            '\t\t\t\tfont-weight: bold;\n' + \
+            '\t\t\t\tfont-size: xx-small;\n' + \
+            '\t\t\t\tpadding: 1em;\n' + \
+            '\t\t\t\ttext-align: left;\n' + \
+            '\t\t\t\tvertical-align: top;\n' + \
+            '\t\t\t\twidth: 10%;\n' + \
+            '\t\t\t\tmax-width: 10%;\n' + \
+            '\t\t\t\twhite-space: nowrap;\n' + \
+            '\t\t\t}\n'
+    html += '\t\t\t.title_col {\n' + \
+            '\t\t\t\tpadding: 1em;\n' + \
+            '\t\t\t\tpadding-left: 5%;\n' + \
+            '\t\t\t\tpadding-right: 5%;\n' + \
+            '\t\t\t}\n'
+    html += '\t\t\t.title_col a {\n' + \
+            '\t\t\t\ttext-decoration: none;\n' + \
+            '\t\t\t\tfont-weight: bold;\n' + \
+            '\t\t\t}\n'
+    html += '\t\t\t/* Hovering over a row */\n' + \
+            '\t\t\t\t/* Number Column */\n' + \
+            '\t\t\t.table_row:hover td:first-child {\n' + \
+            f'\t\t\t\tcolor: {white};\n' + \
+            f'\t\t\t\ttext-shadow: 0px 0px 10px {black};\n' + \
+            '\t\t\t}\n' + \
+            '\t\t\t\t/* Detail Column */\n' + \
+            '\t\t\t\t\t\t/* Name Color */\n' + \
+            '\t\t\t.table_row:hover td:nth-child(2) span {\n' + \
+            f'\t\t\t\tcolor: {bright_blue};\n' + \
+            f'\t\t\t\ttext-shadow: 0px 0px 10px {black};\n' + \
+            '\t\t\t}\n' + \
+            '\t\t\t\t\t\t/* Time Color */\n' + \
+            '\t\t\t.table_row:hover td:nth-child(2) {\n' + \
+            f'\t\t\t\tcolor: {white};\n' + \
+            f'\t\t\t\ttext-shadow: 0px 0px 10px {black};\n' + \
+            '\t\t\t}\n' + \
+            '\t\t\t\t/* Title Column */\n' + \
+            '\t\t\t.table_row:hover td:nth-child(3) a {\n' + \
+            f'\t\t\t\tcolor: {pale_red};\n' + \
+            f'\t\t\t\ttext-shadow: 0px 0px 10px {black};\n' + \
+            '\t\t\t}\n'
+    html += '\t\t\t/* Transition Times */\n' + \
+            '\t\t\t.table_row td {\n' + \
+            '\t\t\t\ttransition: all 1.0s;\n' + \
+            '\t\t\t}\n'
+    html += '\t\t\t.table_row span,\n' + \
+            '\t\t\t.table_row a {\n' + \
+            '\t\t\t\ttransition: all 0.1s;\n' + \
+            '\t\t\t}\n'
+    html += '\t\t\t/* Default text settings for number col */\n' + \
+            '\t\t\t.table_row td:first-child {\n' + \
+            f'\t\t\t\tcolor: {pale_grey};\n' + \
+            '\t\t\t}\n'
+    html += '\t\t\t/* Default text settings for detail col */\n' + \
+            '\t\t\t.table_row td:nth-child(2) span {\n' + \
+            f'\t\t\t\tcolor: {dark_blue}; /* the author */\n' + \
+            '\t\t\t}\n' + \
+            '\t\t\t.table_row td:nth-child(2) {\n' + \
+            f'\t\t\t\tcolor: {pale_grey}; /* the time */\n' + \
+            '\t\t\t}\n'
+    html += '\t\t\t/* Default text settings for title col */\n' + \
+            '\t\t\t.table_row td:nth-child(3) a {\n' + \
+            f'\t\t\t\tcolor: {title_blue};\n' + \
+            '\t\t\t}\n'
+    html += '\t\t\t/* on-screen buttons */\n' + \
+            '\t\t\t#menu-div {\n' + \
+            '\t\t\t\tposition: fixed;\n' + \
+            '\t\t\t\ttop: 125px;\n' + \
+            '\t\t\t\tright: 0%;\n' + \
+            '\t\t\t\tz-index: 9999;\n' + \
+            '\t\t\t}\n' + \
+            '\t\t\t#left-div {\n' + \
+            '\t\t\t\tposition: fixed;\n' + \
+            '\t\t\t\ttop: 50%;\n' + \
+            '\t\t\t\tleft: 0%;\n' + \
+            '\t\t\t\ttransform: translateY(-50%);\n' + \
+            '\t\t\t\tz-index: 9999;\n' + \
+            '\t\t\t}\n' + \
+            '\t\t\t#right-div {\n' + \
+            '\t\t\t\tposition: fixed;\n' + \
+            '\t\t\t\ttop: 50%;\n' + \
+            '\t\t\t\tright: 0%;\n' + \
+            '\t\t\t\ttransform: translateY(-50%);\n' + \
+            '\t\t\t\tz-index: 9999;\n' + \
+            '\t\t\t}\n' + \
+            '\t\t\t#menu-div span,\n' + \
+            '\t\t\t#left-div span,\n' + \
+            '\t\t\t#right-div span {\n' + \
+            '\t\t\t\tfont-size:4em;\n' + \
+            '\t\t\t}\n' + \
+            '\t\t\t#menu-div span a,\n' + \
+            '\t\t\t#left-div span a,\n' + \
+            '\t\t\t#right-div span a {\n' + \
+            '\t\t\t\ttext-decoration:none;\n' + \
+            f'\t\t\t\tcolor:{pale_blue};\n' + \
+            '\t\t\t}\n'
     html += '\t\t</style>\n'
     html += '\t</head>\n'
 
@@ -271,8 +347,8 @@ for filename in os.listdir('./CSVs'):
     # UPPER RIGHT SIDE MENU LINK ☰
     # if the file name isn't 2020.08.csv [0], or today's yyyy.mm.csv [-2] put the upper right side menu link:
     if filename != sorted(os.listdir('./CSVs'))[0] and filename != sorted(os.listdir('./CSVs'))[-2]:
-        html += '\t\t<div id="menu-div"><span><a href="index.html"' + \
-                f'onmouseover="this.style.color=\'{pale_red}\'"' + \
+        html += '\t\t<div id="menu-div"><span><a href="index.html" ' + \
+                f'onmouseover="this.style.color=\'{pale_red}\'" ' + \
                 f'onmouseout="this.style.color=\'{pale_blue}\'">☰</a></span></div>\n'
 
     # LEFT SIDE ARROW ◄ ( or ☰ )
@@ -281,13 +357,13 @@ for filename in os.listdir('./CSVs'):
         previous_index = sorted(os.listdir('./CSVs')).index(filename) - 1
         lname = sorted(os.listdir('./CSVs'))[previous_index].replace('./CSVs', '').replace('.csv', '')
         leftlink = f'{lname}.{title1}.{title2.replace(" ", ".")}.html'
-        html += f'\t\t<div id="left-div"><span><a href="{leftlink}"' + \
-                f'onmouseover="this.style.color=\'{pale_red}\'"' + \
+        html += f'\t\t<div id="left-div"><span><a href="{leftlink}" ' + \
+                f'onmouseover="this.style.color=\'{pale_red}\'" ' + \
                 f'onmouseout="this.style.color=\'{pale_blue}\'">◄</a></span></div>\n'
     # but if the file name is 2020.08.csv [0], put the ☰ on the left side
     elif filename == sorted(os.listdir('./CSVs'))[0]:
-        html += f'\t\t<div id="left-div"><span><a href="index.html"' + \
-                f'onmouseover="this.style.color=\'{pale_red}\'"' + \
+        html += f'\t\t<div id="left-div"><span><a href="index.html" ' + \
+                f'onmouseover="this.style.color=\'{pale_red}\'" ' + \
                 f'onmouseout="this.style.color=\'{pale_blue}\'">☰</a></span></div>\n'
 
     # RIGHT SIDE ARROW ► ( or ☰ )
@@ -296,13 +372,13 @@ for filename in os.listdir('./CSVs'):
         next_index = sorted(os.listdir('./CSVs')).index(filename) + 1
         rname = sorted(os.listdir('./CSVs'))[next_index].replace('./CSVs', '').replace('.csv', '')
         rightlink = f'{rname}.{title1}.{title2.replace(" ", ".")}.html'
-        html += f'\t\t<div id="right-div"><span><a href="{rightlink}"' + \
-                f'onmouseover="this.style.color=\'{pale_red}\'"' + \
+        html += f'\t\t<div id="right-div"><span><a href="{rightlink}" ' + \
+                f'onmouseover="this.style.color=\'{pale_red}\'" ' + \
                 f'onmouseout="this.style.color=\'{pale_blue}\'">►</a></span></div>\n'
     # but if the file name is today's yyyy.mm.csv [-2], put the ☰ on the right side
     elif filename == sorted(os.listdir('./CSVs'))[-2]:
-        html += f'\t\t<div id="right-div"><span><a href="index.html"' + \
-                f'onmouseover="this.style.color=\'{pale_red}\'"' + \
+        html += f'\t\t<div id="right-div"><span><a href="index.html" ' + \
+                f'onmouseover="this.style.color=\'{pale_red}\'" ' + \
                 f'onmouseout="this.style.color=\'{pale_blue}\'">☰</a></span></div>\n'
 
     # TITLE
@@ -333,46 +409,120 @@ for file in os.listdir('./Pages'):
 files = sorted(files, reverse=True)
 
 first_post = True
+
 # update the new index.html
 path = './Pages/index.html'
-with open(path, mode='w', encoding='utf-8') as f:
-    title = f'{fire} {title1} {title2} {fire}'
-    html = f'<!DOCTYPE html>\n<html>\n<head>\n<meta charset="UTF-8">\n'
-    html += f'<title>{title}</title>\n'
-    html += '<style>\nbody {\nbackground-color:black;\ncolor:#4d4848;\nfont-family: Arial, sans-serif, Segoe UI Emoji, '
-    html += 'Noto Color Emoji, Twemoji;\nmargin: 0; padding: 0;}\nh1 {\nfont-size: 2.5em; font-weight: normal; color: #464c8a;'
-    html += '\ntext-align: center;text-shadow: 0px 0px 4px #464c8a, 0px 0px 4px #464c8a, 0px 0px 5px #464c8a;\n}</style>\n</head>\n<body>\n'
-    html += f'<h1><a href="{gaw_url}" style="text-decoration:none;color:lightgray;font-weight:bold">{title}</a></h1>\n'
-    html += '<div id="left-div" style="position: fixed; top: 25px; left: 2%; z-index: 9999;">'
-    html += f'<span style="font-size:3em;"><a href="{all_stickies_file}.GREATAWAKENING.WIN.STICKIES.RELOADED.html" style="text-decoration:none;" onmouseover="this.style.textShadow=\'0px 0px 10px white\';" onmouseout="this.style.textShadow=\'none\'">{all_link}</a></span></div>\n'
-    html += '<div id="right-div" style="position: fixed; top: 25px; right: 2%; z-index: 9999;">'
-    html += f'<span style="font-size:3em;"><a href="{download_url}" style="text-decoration:none;" onmouseover="this.style.textShadow=\'0px 0px 10px white\';" onmouseout="this.style.textShadow=\'none\'">{download_link}</a></span></div>\n'
-    html += '<div id="right-div" style="position: fixed; top: 125px; right: 2%; z-index: 9999;">'
-    html += f'<span style="font-size:3em;"><a href="{changes_url}" style="text-decoration:none;" onmouseover="this.style.textShadow=\'0px 0px 10px white\';" onmouseout="this.style.textShadow=\'none\'">{changes_link}</a></span></div>\n'
-    html += '<div id="right-div" style="position: fixed; top: 225px; right: 2%; z-index: 9999;">'
-    html += f'<span style="font-size:3em;"><a href="{code_url}" style="text-decoration:none;" onmouseover="this.style.textShadow=\'0px 0px 10px white\';" onmouseout="this.style.textShadow=\'none\'">{code_link}</a></span></div>\n'
-    html += '<table style="width: 75%; margin: 0 auto;">\n<tbody>\n'
-    for index, file in enumerate(files):
-        fileTitle = file.replace('html', '').replace('.', ' ').replace(' ', '.', 1).replace('GREATAWAKENING WIN',
-                                                                                            title1).strip()
-        # Set alternating row colors
-        row_color = even_row if index % 2 == 0 else odd_row
-        table_row = f'<tr style="background-color: {row_color}; border-bottom: 1px solid darkred; text-align:center;" '
-        table_row += f'onmouseover="this.style.backgroundColor=\'#253147\'; this.childNodes[0].childNodes[0].style.color=\'#dc4848\'; this.childNodes[0].childNodes[0].style.textShadow=\'0px 0px 5px black\';" '
-        table_row += f'onmouseout="this.style.backgroundColor=\'{row_color}\'; this.childNodes[0].childNodes[0].style.color=\'#4ca1e0\'; this.childNodes[0].childNodes[0].style.textShadow=\'none\';" '
-        table_row += f'onclick="window.location.href=\'./{file}\'"; >'
-        if first_post:
-            if file.startswith(f'{year}.{month}'):
-                reloadingTitle = file.replace('html', '').replace('.', ' ').replace(' ', '.', 1).replace(
-                    'GREATAWAKENING WIN', title1).replace(title2, title3).strip()
-                table_row += f'<td style="padding:1em;color:#4ca1e0;font-weight:bold;"><a href="./{file}" target="_self" style="color:inherit;text-decoration:inherit;">{reloading} {fire} {reloadingTitle} {fire} {reloading}</a></td>'
-            else:
-                table_row += f'<td style="padding:1em;color:#4ca1e0;font-weight:bold;"><a href="./{file}" target="_self" style="color:inherit;text-decoration:inherit;">{boom} {new} {fire} {fileTitle} {fire} {new} {boom}</a></td>'
-                first_post = False
+title = f'{fire} {title1} {title2} {fire}'
+
+# Create the index.html HTML page
+
+# HEADER
+html = ''
+html += '<!DOCTYPE html>\n'
+html += '<html>\n'
+html += '\t<head>\n'
+html += '\t\t<meta charset="UTF-8">\n'
+html += f'\t\t<title>{title}</title>\n'
+html += '\t\t<style>\n'
+html += '\t\t\tbody {\n' + \
+        f'\t\t\t\tbackground-color: {black};\n' + \
+        f'\t\t\t\tcolor: {pale_grey};\n' + \
+        f'\t\t\t\tfont-family: {fonts};\n' + \
+        '\t\t\t\tmargin: 0;\n' + \
+        '\t\t\t\tpadding: 0;\n' + \
+        '\t\t\t}\n'
+html += '\t\t\th1 {\n' + \
+        '\t\t\t\tfont-size: 2.5em;\n' + \
+        '\t\t\t\tfont-weight: normal;\n' + \
+        '\t\t\t\ttext-align: center;\n' + \
+        f'\t\t\t\ttext-shadow: 0px 0px 4px {h1_shadow}, 0px 0px 4px {h1_shadow}, 0px 0px 5px {h1_shadow};\n' + \
+        '\t\t\t}\n'
+html += '\t\t\th1 a {\n' + \
+        '\t\t\t\ttext-decoration: none;\n' + \
+        '\t\t\t\tfont-weight: bold;\n' + \
+        f'\t\t\t\tcolor: {white};\n' + \
+        '\t\t\t}\n'
+html += '\t\t\ttable {\n' + \
+        '\t\t\t\twidth: 75%;\n' + \
+        '\t\t\t\tmargin: 0 auto;\n' + \
+        '\t\t\t}\n'
+html += '\t\t\t#all {\n' + \
+        '\t\t\t\ttop: 25px;\n' + \
+        '\t\t\t\tleft: 2%;\n' + \
+        '\t\t\t}\n'
+html += '\t\t\t#download {\n' + \
+        '\t\t\t\ttop: 25px;\n' + \
+        '\t\t\t\tright: 2%;\n' + \
+        '\t\t\t}\n'
+html += '\t\t\t#changes {\n' + \
+        '\t\t\t\ttop: 125px;\n' + \
+        '\t\t\t\tright: 2%;\n' + \
+        '\t\t\t}\n'
+html += '\t\t\t#code {\n' + \
+        '\t\t\t\ttop: 225px;\n' + \
+        '\t\t\t\tright: 2%;\n' + \
+        '\t\t\t}\n'
+html += '\t\t\t#all,\n' + \
+        '\t\t\t\t#download,\n' + \
+        '\t\t\t\t#changes,\n' + \
+        '\t\t\t\t#code {\n' + \
+        '\t\t\t\tposition: fixed;\n' + \
+        '\t\t\t\tz-index: 9999;\n' + \
+        '\t\t\t}\n'
+html += '\t\t\t#all span,\n' + \
+        '\t\t\t#download span,\n' + \
+        '\t\t\t#changes span,\n' + \
+        '\t\t\t#code span {\n' + \
+        '\t\t\t\tfont-size:3em;\n' + \
+        '\t\t\t}\n'
+html += '\t\t\t#all span a,\n' + \
+        '\t\t\t#download span a,\n' + \
+        '\t\t\t#changes span a,\n' + \
+        '\t\t\t#code span a {\n' + \
+        '\t\t\t\ttext-decoration: none;\n' + \
+        '\t\t\t}\n'
+html += '\t\t</style>\n'
+html += '\t</head>\n'
+html += '\t<body>\n'
+html += f'\t\t<h1><a href="{gaw_url}">{title}</a></h1>\n'
+html += f'\t\t<div id="all"><span><a href="{all_stickies_file}.GREATAWAKENING.WIN.STICKIES.RELOADED.html" ' + \
+        f'onmouseover="this.style.textShadow=\'0px 0px 10px {white}\';" ' +\
+        f'onmouseout="this.style.textShadow=\'none\'">{all_link}</a></span></div>\n'
+html += f'\t\t<div id="download"><span><a href="{download_url}" ' + \
+        f'onmouseover="this.style.textShadow=\'0px 0px 10px {white}\';" ' +\
+        f'onmouseout="this.style.textShadow=\'none\'">{download_link}</a></span></div>\n'
+html += f'\t\t<div id="changes"><span><a href="{changes_url}" ' + \
+        f'onmouseover="this.style.textShadow=\'0px 0px 10px {white}\';" ' +\
+        f'onmouseout="this.style.textShadow=\'none\'">{changes_link}</a></span></div>\n'
+html += f'\t\t<div id="code"><span><a href="{code_url}" ' + \
+        f'onmouseover="this.style.textShadow=\'0px 0px 10px {white}\';" ' +\
+        f'onmouseout="this.style.textShadow=\'none\'">{code_link}</a></span></div>\n'
+html += '<table>\n<tbody>\n'
+for index, file in enumerate(files):
+    fileTitle = file.replace('html', '').replace('.', ' ').replace(' ', '.', 1).\
+        replace('GREATAWAKENING WIN', title1).strip()
+    # Set alternating row colors
+    row_color = even_row if index % 2 == 0 else odd_row
+    table_row = f'<tr style="background-color: {row_color}; border-bottom: 1px solid darkred; text-align:center;" '
+    table_row += f'onmouseover="this.style.backgroundColor=\'#253147\'; this.childNodes[0].childNodes[0].style.color=\'#dc4848\'; this.childNodes[0].childNodes[0].style.textShadow=\'0px 0px 5px black\';" '
+    table_row += f'onmouseout="this.style.backgroundColor=\'{row_color}\'; this.childNodes[0].childNodes[0].style.color=\'#4ca1e0\'; this.childNodes[0].childNodes[0].style.textShadow=\'none\';" '
+    table_row += f'onclick="window.location.href=\'./{file}\'"; >'
+    if first_post:
+        if file.startswith(f'{year}.{month}'):
+            reloadingTitle = file.replace('html', '').replace('.', ' ').replace(' ', '.', 1).replace(
+                'GREATAWAKENING WIN', title1).replace(title2, title3).strip()
+            table_row += f'<td style="padding:1em;color:#4ca1e0;font-weight:bold;"><a href="./{file}" target="_self" style="color:inherit;text-decoration:inherit;">{reloading} {fire} {reloadingTitle} {fire} {reloading}</a></td>'
         else:
-            table_row += f'<td style="padding:1em;color:#4ca1e0;font-weight:bold;"><a href="./{file}" target="_self" style="color:inherit;text-decoration:inherit;">{fire} {fileTitle} {fire}</a></td>'
-        table_row += '</tr>'
-        html += table_row
-    html += '</tbody>\n</table>\n</body>\n</html>'
-    f.write(html)
+            table_row += f'<td style="padding:1em;color:#4ca1e0;font-weight:bold;"><a href="./{file}" target="_self" style="color:inherit;text-decoration:inherit;">{boom} {new} {fire} {fileTitle} {fire} {new} {boom}</a></td>'
+            first_post = False
+    else:
+        table_row += f'<td style="padding:1em;color:#4ca1e0;font-weight:bold;"><a href="./{file}" target="_self" style="color:inherit;text-decoration:inherit;">{fire} {fileTitle} {fire}</a></td>'
+    table_row += '</tr>'
+    html += table_row
+html += '</tbody>\n</table>\n</body>\n</html>'
+
+
+# Write the index.html:
+with open(path, mode='w', encoding='utf-8') as file:
+    file.write(html)
     print(f'wrote \'{path}\'')
