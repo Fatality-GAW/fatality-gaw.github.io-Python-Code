@@ -49,6 +49,6 @@ while True:
     try:
         time.sleep(RETRY_SECONDS)
     except:
-        print("terminated")
+        print(f"\nTerminated by user")
         exit()
 

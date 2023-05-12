@@ -146,13 +146,13 @@ for csv_file in os.listdir('./CSVs'):
                 row_color = sunday_funnies
 
         # Row_color for WinsAnon's 'Wins of the Day:'
-        wins_regex = r'Wins of the Day:'
+        wins_regex = r'Wins of the Day'
         if re.search(wins_regex, row[2]):
             if row[3] == 'WinsAnon':
                 row_color = wins_of_day
 
-        # Row_color for Puncake150's 'Extra Wins of the Day:'
-        wins_regex = r'Extra Wins of the Day:'
+        # Row_color for Puncake150's 'Wins of the Day'
+        wins_regex = r'Wins of the Day'
         if re.search(wins_regex, row[2]):
             if row[3] == 'Puncake150':
                 row_color = extra_wins
