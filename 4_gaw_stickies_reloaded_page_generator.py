@@ -64,7 +64,7 @@ odd_row = '#111111'
 row_highlight = '#253147'
 
 # Regular sticky pattern row colors:
-general_chat = '#400f0f'
+general_chat = '#4a2422'
 unleashed = '#2b2b46'
 sunday_funnies = '#303630'
 wins_of_day = '#3c3727'
@@ -316,20 +316,20 @@ for csv_file in os.listdir('./CSVs'):
             '\t\t\t\ttransition: all 0.1s;\n' + \
             '\t\t\t}\n\n'
     html += '\t\t/* TEXT SETTINGS FOR.. */\n' + \
-            '\t\t\t/* NUMBER COLUMN */\n' + \
+            '\t\t\t/* ..NUMBER COLUMN */\n' + \
             '\t\t\t.table_row td:first-child {\n' + \
             f'\t\t\t\tcolor: {pale_grey};\n' + \
             '\t\t\t}\n\n' + \
-            '\t\t\t/* DETAIL COLUMN */\n' + \
-            '\t\t\t\t/* AUTHOR */\n' + \
+            '\t\t\t/* ..DETAIL COLUMN.. */\n' + \
+            '\t\t\t\t/* ..AUTHOR */\n' + \
             '\t\t\t.table_row td:nth-child(2) span {\n' + \
             f'\t\t\t\tcolor: {dark_blue};\n' + \
             '\t\t\t}\n' + \
-            '\t\t\t\t/* TIME */\n' + \
+            '\t\t\t\t/* ..TIME */\n' + \
             '\t\t\t.table_row td:nth-child(2) {\n' + \
             f'\t\t\t\tcolor: {pale_grey};\n' + \
             '\t\t\t}\n\n' + \
-            '\t\t/* TITLE COLUMN */\n' + \
+            '\t\t\t/* ..TITLE COLUMN */\n' + \
             '\t\t\t.table_row td:nth-child(3) a {\n' + \
             f'\t\t\t\tcolor: {title_blue};\n' + \
             '\t\t\t}\n\n'
