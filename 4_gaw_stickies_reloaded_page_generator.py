@@ -18,6 +18,16 @@ import pytz as pytz
 # Define ALL.CSV's name (MUST MATCH what is defined in section 4: of 3_split_data_into_yyyy.mm.csv_files.py)
 all_stickies_file = "ALL"
 
+# Define the output folder to work with
+output_directory = "./Pages"
+
+# Check and create or use the output_directory:
+if not os.path.exists(output_directory):
+    os.makedirs(output_directory)
+    print("Created ", output_directory, " directory")
+else:
+    print("Using ", output_directory, " directory")
+
 # Get the current date and time in GMT (because that's what the posts are stamped at)
 now = datetime.datetime.now(pytz.timezone('GMT'))
 
@@ -193,15 +203,32 @@ for csv_file in os.listdir('./CSVs'):
             if row[3] == 'meteorknife':
                 row_color = new_q
 
-        # Row_color for general 'Anon Theatre'
-        anon_theater_regex = r'Anon Theatre'
-        if re.search(anon_theater_regex, row[2]):
+        # Row_color for general 'Anon Theatre' or 'Anon Theater'
+        anon_theatre_regex = r'Anon Theatre'
+        anon_theater_regex = r'Anon Theater'
+        if re.search(anon_theatre_regex, row[2]) or re.search(anon_theater_regex, row[2]):
             row_color = anon_theater
 
         # Row_color for general 'New Q'
-        Qdrops1_regex = f'New Q'
-        if re.search(Qdrops1_regex, row[2]):
-            row_color = new_q
+        Qdrops2_regex1 = f'NEW Q'
+        Qdrops2_exclude1 = f'QANON' # Don't highlight "QANON"
+        Qdrops2_exclude2 = f'PROOF' # Don't highlight "PROOF"
+        Qdrops2_exclude3 = f'DECODE' # Don't highlight "DECODE"
+        Qdrops2_exclude4 = f'INTERPRET' # Don't highlight "INTERPRET"
+        Qdrops2_exclude5 = f'DISCREDIT' # Don't highlight "DISCREDIT"
+        Qdrops2_exclude6 = f'QFAGS' # Don't highlight "QFAGS"
+        Qdrops2_exclude7 = f'QTARDS' # Don't highlight "QTARDS"
+        Qdrops2_exclude8 = f'QUARTER' # Don't highlight "QUARTER"
+        if re.search(Qdrops2_regex1, row[2].upper()):
+            if not re.search(Qdrops2_exclude1, row[2].upper()) and not \
+                    re.search(Qdrops2_exclude2, row[2].upper()) and not \
+                    re.search(Qdrops2_exclude3, row[2].upper()) and not \
+                    re.search(Qdrops2_exclude4, row[2].upper()) and not \
+                    re.search(Qdrops2_exclude5, row[2].upper()) and not \
+                    re.search(Qdrops2_exclude6, row[2].upper()) and not \
+                    re.search(Qdrops2_exclude7, row[2].upper()) and not \
+                    re.search(Qdrops2_exclude8, row[2].upper()):
+                row_color = new_q
 
         ''' /\\ /\\ END SECTION: handle row coloring for user/post patterns /\\ /\\ '''
 
@@ -414,7 +441,7 @@ for csv_file in os.listdir('./CSVs'):
 
     # Write this HTML page to file
     title = title.replace(title3, title2).replace(" ", ".")
-    html_file = f'./Pages/{title}.html'
+    html_file = f'{output_directory}/{title}.html'
     with open(html_file, mode='w', encoding='utf-8') as f:
         f.write(html)
         print(f'wrote \'{html_file}\'')
@@ -422,7 +449,7 @@ for csv_file in os.listdir('./CSVs'):
 # Get the list of HTML files
 pattern = re.compile(r'^(\d{4}\.\d{2})\.GREATAWAKENING\.WIN\.STICKIES\.RELOADED\.html$')
 html_files = []
-for html_file in os.listdir('./Pages'):
+for html_file in os.listdir(f'{output_directory}'):
     if pattern.match(html_file):
         html_files.append(html_file)
 
@@ -433,7 +460,7 @@ html_files = sorted(html_files, reverse=True)
 is_first_page = True
 
 # Define the new index.html file name:
-index_html_file = './Pages/index.html'
+index_html_file = f'{output_directory}/index.html'
 
 # Generate a title for the index.html
 title = f'{fire} {title1} {title2} {fire}'

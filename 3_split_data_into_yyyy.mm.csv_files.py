@@ -16,6 +16,16 @@ GAW_sticky_logs_objects = './WorkingCSVs/GAW_sticky_logs_objects.csv'
 
 GAW_sticky_posts_objects = './WorkingCSVs/GAW_sticky_posts_objects.csv'
 
+# Define the output folder to work with
+output_directory = "./CSVs"
+
+# Check and create or use the output_directory:
+if not os.path.exists(output_directory):
+    os.makedirs(output_directory)
+    print("Created ", output_directory, " directory")
+else:
+    print("Using ", output_directory, " directory")
+
 # 1: Open the GAW_sticky_logs_objects CSV file for reading
 with open(GAW_sticky_logs_objects, 'r') as GAW_sticky_logs_objects_file:
     reader = csv.reader(GAW_sticky_logs_objects_file)
@@ -86,7 +96,7 @@ for month in month_dictionary:
         continue
 
     # Get the file name to output to:
-    file = f'./CSVs/{month}.csv'
+    file = f'{output_directory}/{month}.csv'
 
     # Create a set of urls of with this month:
     month_urls = month_dictionary[month]
@@ -122,7 +132,7 @@ for month in month_dictionary:
 all_unique_gaw_sticky_posts = reversed(all_unique_gaw_sticky_posts)
 
 
-file = f'./CSVs/ALL.csv'
+file = f'{output_directory}/ALL.csv'
 
 with open(file, 'w', newline='') as output_file:
     writer = csv.writer(output_file)

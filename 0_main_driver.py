@@ -3,6 +3,9 @@
     -----------------------------
 
     This runs the entire scraping process on a timer.
+    it may require you to install packages:
+        - pytz
+        - beautifulsoup4
 """
 import os
 import subprocess
