@@ -144,8 +144,10 @@ for csv_file in os.listdir('./CSVs'):
 
         # Row_color for ashlanddog's & team's 'UNLEASHED...' & 'Time For A "Buzz"'
         unleashed_regex = r'UNLEASHED...'
+        unleashed_lowercase_regex = r'Unleashed'
         buzz_regex = r'Time For A "Buzz"'
-        if re.search(unleashed_regex, row[2]) or re.search(buzz_regex, row[2]):
+        if re.search(unleashed_regex, row[2]) or re.search(buzz_regex, row[2]) or \
+                re.search(unleashed_lowercase_regex, row[2]):
             if row[3] == 'ashlanddog' or row[3] == 'Taffy333' or row[3] == 'Nurarihyon_no_MAGA':
                 row_color = unleashed
 
