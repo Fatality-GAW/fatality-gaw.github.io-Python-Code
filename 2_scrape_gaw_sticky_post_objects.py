@@ -28,7 +28,7 @@ GAW_sticky_posts_objects = './WorkingCSVs/GAW_sticky_posts_objects.csv'
 
 count = 0
 to_get = 0  # 0 to get them all
-max_workers = 50
+max_workers = 5
 all_posts = 0
 
 

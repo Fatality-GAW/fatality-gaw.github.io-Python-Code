@@ -32,7 +32,7 @@ import queue
 NUM_THREADS = 50
 CHECK_RESULTS_INTERVAL = 0.1
 first_sticky_page_no = 1
-last_sticky_page_no = 5  # <---------------------------SET THIS TO THE HIGHEST PAGE FIRST RUN, BACK TO 5 for next runs
+last_sticky_page_no = 2  # <---------------------------SET THIS TO THE HIGHEST PAGE FIRST RUN, BACK TO 5 for next runs
 GAW_sticky_logs_objects = './WorkingCSVs/GAW_sticky_logs_objects.csv'
 stickies_time = []
 

@@ -137,7 +137,7 @@ for csv_file in os.listdir('./CSVs'):
         ''' \\/ \\/ START SECTION: handle row coloring for user/post patterns \\/ \\/ '''
 
         # Row_color for bubble_bursts 'General Chat for'
-        chat_regex = r'General Chat for'
+        chat_regex = r'General Chat'
         if re.search(chat_regex, row[2]):
             if row[3] == 'bubble_bursts':
                 row_color = general_chat
