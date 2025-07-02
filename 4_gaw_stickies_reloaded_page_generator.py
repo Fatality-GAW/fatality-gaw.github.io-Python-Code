@@ -236,12 +236,11 @@ for csv_file in os.listdir('./CSVs'):
 
         # Create the table row
         table_row = ''
-        table_row += f'\t\t\t\t<tr class="table_row" id="{row_count}" style="background-color: {row_color};" '
-        table_row += 'onclick="if (event.target.tagName == \'A\') return true; '
-        table_row += f'window.open(\'{row[1]}\',\'_blank\',\'noopener noreferrer\');" >'
-        table_row += f'<td class="number_col">{row_count}</td>'
-        table_row += f'<td class="detail_col"><span>{row[3]}</span> @<br>{row[0]}</td>'
-        table_row += f'<td class="title_col"><a href="{row[1]}" target="_blank">{row[2]}</a></td>'
+        table_row += f'\t\t\t\t<tr class="t_r" id="{row_count}" style="background-color:{row_color}" '
+        table_row += f'onclick="oc({row[1].replace(gaw_url, '').replace('/p/', '').replace('/x/c/','')})">'
+        table_row += f'<td class="n_c">{row_count}</td>'
+        table_row += f'<td class="d_c"><span>{row[3]}</span> @<br>{row[0]}</td>'
+        table_row += f'<td class="t_c"><a href="{row[1]}" target="_blank">{row[2]}</a></td>'
         table_row += '</tr>\n'
 
         # Add this row to the table_rows array:
@@ -258,7 +257,7 @@ for csv_file in os.listdir('./CSVs'):
     html += '\t\t<style>\n'
     html += '\t\t/* GENERAL SETTINGS */\n' + \
             '\t\t\tbody {\n' + \
-            f'\t\t\t\tbackground-color: {black};\n' + \
+            f'\t\t\t\tbackground-color:{black};\n' + \
             f'\t\t\t\tfont-family: {fonts};\n' + \
             '\t\t\t\tmargin: 0;\n' + \
             '\t\t\t\tpadding: 0;\n' + \
@@ -287,13 +286,13 @@ for csv_file in os.listdir('./CSVs'):
             '\t\t\t\tborder-collapse: collapse;\n' + \
             '\t\t\t}\n\n'
     html += '\t\t/* DEFAULT COLUMN COLORS */\n' + \
-            '\t\t\t.number_col {\n' + \
-            f'\t\t\t\tbackground-color: {black};\n' + \
+            '\t\t\t.n_c {\n' + \
+            f'\t\t\t\tbackground-color:{black};\n' + \
             '\t\t\t\ttop: 0;\n' + \
             '\t\t\t\ttext-align: right;\n' + \
             '\t\t\t\tvertical-align: top;\n' + \
             '\t\t\t}\n\n' + \
-            '\t\t\t.detail_col {\n' + \
+            '\t\t\t.d_c {\n' + \
             '\t\t\t\tfont-weight: bold;\n' + \
             '\t\t\t\tfont-size: xx-small;\n' + \
             '\t\t\t\tpadding: 1em;\n' + \
@@ -303,63 +302,63 @@ for csv_file in os.listdir('./CSVs'):
             '\t\t\t\tmax-width: 10%;\n' + \
             '\t\t\t\twhite-space: nowrap;\n' + \
             '\t\t\t}\n\n' + \
-            '\t\t\t.title_col {\n' + \
+            '\t\t\t.t_c {\n' + \
             '\t\t\t\tpadding: 1em;\n' + \
             '\t\t\t\tpadding-left: 5%;\n' + \
             '\t\t\t\tpadding-right: 5%;\n' + \
             '\t\t\t}\n\n' + \
-            '\t\t\t.title_col a {\n' + \
+            '\t\t\t.t_c a {\n' + \
             '\t\t\t\ttext-decoration: none;\n' + \
             '\t\t\t\tfont-weight: bold;\n' + \
             '\t\t\t}\n\n'
     html += '\t\t/* ROW HOVERING COLORS */\n' + \
             '\t\t\t/* NUMBER COLUMN */\n' + \
-            '\t\t\t.table_row:hover td:first-child {\n' + \
+            '\t\t\t.t_r:hover td:first-child {\n' + \
             f'\t\t\t\tcolor: {white};\n' + \
             f'\t\t\t\ttext-shadow: 0px 0px 10px {black};\n' + \
             '\t\t\t}\n\n' + \
             '\t\t\t/* DETAIL COLUMN */\n' + \
             '\t\t\t\t\t/* NAME COLOR */\n' + \
-            '\t\t\t.table_row:hover td:nth-child(2) span {\n' + \
+            '\t\t\t.t_r:hover td:nth-child(2) span {\n' + \
             f'\t\t\t\tcolor: {bright_blue};\n' + \
             f'\t\t\t\ttext-shadow: 0px 0px 10px {black};\n' + \
             '\t\t\t}\n' + \
             '\t\t\t\t\t/* TIME COLOR */\n' + \
-            '\t\t\t.table_row:hover td:nth-child(2) {\n' + \
+            '\t\t\t.t_r:hover td:nth-child(2) {\n' + \
             f'\t\t\t\tcolor: {white};\n' + \
             f'\t\t\t\ttext-shadow: 0px 0px 10px {black};\n' + \
             '\t\t\t}\n\n' + \
             '\t\t\t/* TITLE COLUMN */\n' + \
-            '\t\t\t.table_row:hover td:nth-child(3) a {\n' + \
+            '\t\t\t.t_r:hover td:nth-child(3) a {\n' + \
             f'\t\t\t\tcolor: {pale_red};\n' + \
             f'\t\t\t\ttext-shadow: 0px 0px 10px {black};\n' + \
             '\t\t\t}\n\n'
     html += '\t\t/* TRANSITION TIMES */\n' + \
             '\t\t\t/* NUMBER & TIME */\n' + \
-            '\t\t\t.table_row td {\n' + \
+            '\t\t\t.t_r td {\n' + \
             '\t\t\t\ttransition: all 1.0s;\n' + \
             '\t\t\t}\n' + \
             '\t\t\t/* NAME & TITLE */\n' + \
-            '\t\t\t.table_row span,\n' + \
-            '\t\t\t.table_row a {\n' + \
+            '\t\t\t.t_r span,\n' + \
+            '\t\t\t.t_r a {\n' + \
             '\t\t\t\ttransition: all 0.1s;\n' + \
             '\t\t\t}\n\n'
     html += '\t\t/* TEXT SETTINGS FOR.. */\n' + \
             '\t\t\t/* ..NUMBER COLUMN */\n' + \
-            '\t\t\t.table_row td:first-child {\n' + \
+            '\t\t\t.t_r td:first-child {\n' + \
             f'\t\t\t\tcolor: {pale_grey};\n' + \
             '\t\t\t}\n\n' + \
             '\t\t\t/* ..DETAIL COLUMN.. */\n' + \
             '\t\t\t\t/* ..AUTHOR */\n' + \
-            '\t\t\t.table_row td:nth-child(2) span {\n' + \
+            '\t\t\t.t_r td:nth-child(2) span {\n' + \
             f'\t\t\t\tcolor: {dark_blue};\n' + \
             '\t\t\t}\n' + \
             '\t\t\t\t/* ..TIME */\n' + \
-            '\t\t\t.table_row td:nth-child(2) {\n' + \
+            '\t\t\t.t_r td:nth-child(2) {\n' + \
             f'\t\t\t\tcolor: {pale_grey};\n' + \
             '\t\t\t}\n\n' + \
             '\t\t\t/* ..TITLE COLUMN */\n' + \
-            '\t\t\t.table_row td:nth-child(3) a {\n' + \
+            '\t\t\t.t_r td:nth-child(3) a {\n' + \
             f'\t\t\t\tcolor: {title_blue};\n' + \
             '\t\t\t}\n\n'
     html += '\t\t/* ON-SCREEN BUTTONS */\n' + \
@@ -395,6 +394,14 @@ for csv_file in os.listdir('./CSVs'):
             f'\t\t\t\tcolor:{pale_blue};\n' + \
             '\t\t\t}\n'
     html += '\t\t</style>\n'
+    html += '\t\t</script>\n' + \
+            '\t\t\tfunction oc(id) {\n' + \
+            '\t\t\t\tif (event.target.tagName === \'A\') return true;\n' + \
+            '\t\t\t\tconst postId = id.dataset.post;\n' + \
+            '\t\t\t\tconst url = \'https://GreatAwakening.win/p/${postId}/x/c/\';\n' + \
+            '\t\t\t\twindow.open(url, \'_blank\', \'noopener noreferrer\');\n' + \
+            '\t\t\t}\n' + \
+            '\t\t</script>\n'
     html += '\t</head>\n'
     # BODY
     html += '\t<body>\n'
@@ -477,7 +484,7 @@ html += '\t\t<meta charset="UTF-8">\n'
 html += f'\t\t<title>{title}</title>\n'
 html += '\t\t<style>\n'
 html += '\t\t\tbody {\n' + \
-        f'\t\t\t\tbackground-color: {black};\n' + \
+        f'\t\t\t\tbackground-color:{black};\n' + \
         f'\t\t\t\tcolor: {pale_grey};\n' + \
         f'\t\t\t\tfont-family: {fonts};\n' + \
         '\t\t\t\tmargin: 0;\n' + \
@@ -573,13 +580,13 @@ for index, html_file_name in enumerate(html_files):
 
     # Set alternating row colors and link:
     row_color = even_row if index % 2 == 0 else odd_row
-    table_row = f'\t\t\t\t<tr style="background-color: {row_color};" ' + \
+    table_row = f'\t\t\t\t<tr style="background-color:{row_color}" ' + \
                 f'onmouseover="this.style.backgroundColor=\'{row_highlight}\'; ' + \
                 f'this.childNodes[0].childNodes[0].style.color=\'{pale_red}\'; ' + \
-                f'this.childNodes[0].childNodes[0].style.textShadow=\'0px 0px 5px {black}\';" ' + \
+                f'this.childNodes[0].childNodes[0].style.textShadow=\'0px 0px 5px {black}\'" ' + \
                 f'onmouseout="this.style.backgroundColor=\'{row_color}\'; ' + \
                 f'this.childNodes[0].childNodes[0].style.color=\'{title_blue}\'; ' + \
-                f'this.childNodes[0].childNodes[0].style.textShadow=\'{none}\';" ' + \
+                f'this.childNodes[0].childNodes[0].style.textShadow=\'{none}\'" ' + \
                 f'onclick="window.location.href=\'./{html_file_name}\'">'
     # If this is the row for the first page
     if is_first_page:
