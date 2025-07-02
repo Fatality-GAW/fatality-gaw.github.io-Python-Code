@@ -394,7 +394,7 @@ for csv_file in os.listdir('./CSVs'):
             f'\t\t\t\tcolor:{pale_blue};\n' + \
             '\t\t\t}\n'
     html += '\t\t</style>\n'
-    html += '\t\t</script>\n' + \
+    html += '\t\t<script>\n' + \
             '\t\t\tfunction oc(id) {\n' + \
             '\t\t\t\tif (event.target.tagName === \'A\') return true;\n' + \
             '\t\t\t\tconst postId = id.dataset.post;\n' + \
